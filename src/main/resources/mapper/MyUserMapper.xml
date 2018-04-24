@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeta.sbl2.mapper.MyUserMapper">
+
+  <select id="findUserById" resultType="com.yeta.sbl2.pojo.User" parameterType="java.lang.Integer">
+    SELECT id, name FROM user WHERE id = #{id}
+  </select>
+
+  <select id="findUsers" resultType="com.yeta.sbl2.pojo.User">
+    SELECT id, name FROM user
+  </select>
+</mapper>

@@ -1,0 +1,93 @@
+#####jackson
+1. @JsonIgnore：返回Json时忽略该字段
+2. @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss a", locale="zh", timezone="GMT+8")：用于返回Json时格式化日期时间
+3. @JsonInclude(Include.NON_NULL)：用于返回Json时忽略为空的字段
+
+#####devtools
+1. 依赖
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<!--依赖不会传递，之后依赖该项目的项目需要重新引入依赖-->
+	<optional>true</optional>
+</dependency>
+2. 配置
+spring.devtools.restart.enabled = true		#热部署生效
+spring.devtools.restart.additional-paths = src/main/java	#设置重启的目录
+
+资源文件属性配置
+1. 依赖
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-configuration-processor</artifactId>
+	<!--依赖不会传递，之后依赖该项目的项目需要重新引入依赖-->
+	<optional>true</optional>
+</dependency>
+2. 资源文件：resources/resource.properties
+com.yeta.name = yeta
+3. 类中引用：
+@Configuration
+@ConfigurationProperties(prefix="com.yeta")
+@PropertySource(value="classpath:resource.properties")
+//一个包含name字段的model
+
+#####thymeleaf（ModelMap）
+1. 依赖
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+2. 配置
+spring.thymeleaf.prefix = classpath:/templates/
+spring.thymeleaf.suffix = .html
+spring.thymeleaf.mode = HTML5
+spring.thymeleaf.encoding = UTF-8
+spring.thymeleaf.content-type = text/html
+spring.thymeleaf.cache=false		#关闭缓存，即时刷新
+
+#####请求是否为ajax请求
+request.getHeader("X-Requested-With") != null && "XMLHttpRequest".equals(request.getHeader("X-Requested-With").toString())
+
+#####整合mybatis
+1. 依赖
+2. generatorConfig.xml：反序列化配置
+3. MyMapper：通用mapper配置
+4. aoolication.properties：配置mybatis、通用mapper、pagehelper分页插件
+5. GeneratorDisplay：反序列化自动生成pojo、mapper类、mapper.xml
+6. 自定义mapper实现：自己写一个mapper类、一个mapper.xml
+7. 增、删、改事务用@Transactional(propagation = Propagation.SUPPORTS)、查事务用@Transactional(propagation = Propagation.SUPPORTS)，遇到错误可回滚
+
+#####整合redis
+1. 依赖
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+2. 下载安装redis和redis desktop manager，redis-server.exe redis.windows.conf命令启动redis服务
+3. 封装redis常用操作类
+
+#####整合定时任务
+1. 注解：@EnableScheduling开启定时任务、@Scheduled设置定时任务、@Component等作为组件被扫描
+2. 在线corn表达式生成网站：http://cron.qqe2.com/
+
+#####整合异步任务
+1. 注解：@EnableAsync开启异步任务、@Async设置异步任务、@Component等作为组件被扫描
+2. 使用场景：发送短信、发送邮件、APP消息推送
+
+#####拦截器
+1. 注解：@Configuration配置拦截器
+2. 继承：WebMvcConfigurerAdapter类
+3. 重写：addInterceptors添加拦截地址
+
+#####系统架构师
+1. 高可用：负载均衡、限流措施、分布式事务、分布式Session、压力测试、...
+2. 高并发：缓存应用、Http缓存、异步并发处理、JVM的优化、队列应用、动静分离
+
+#####Guns：后台管理系统框架
+1. 包含内容：
+权限管理：用户管理、角色管理、部门管理
+			菜单管理、字典管理
+分析维度：业务日志、登陆日志
+			监控管理、通知管理、代码生成
+2. 下载网站：https://gitee.com/naan1993/guns
+3. 打包：mvn clean package -Dmaven.test.skip=true

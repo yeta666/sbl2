@@ -3,6 +3,8 @@ package com.yeta.sbl2.service;
 import com.yeta.sbl2.pojo.User;
 import com.yeta.sbl2.utils.MyResponse;
 
+import javax.mail.MessagingException;
+
 /**
  * 用户service
  * Created by YETA666 on 2018/4/20 0020.
@@ -22,5 +24,9 @@ public interface UserService {
     MyResponse queryUsers(User user);
 
     MyResponse queryUsersPaged(Integer page, Integer pageSize, User user);
+
+    MyResponse register(User user) throws MessagingException;
+
+    MyResponse active(String code);
 
 }

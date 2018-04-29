@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50544
 File Encoding         : 65001
 
-Date: 2018-04-24 11:29:07
+Date: 2018-04-29 15:24:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,20 +20,17 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL COMMENT 'id',
-  `name` varchar(255) DEFAULT NULL COMMENT '姓名',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `state` tinyint(1) unsigned DEFAULT NULL,
+  `code` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'yeta111');
-INSERT INTO `user` VALUES ('2', 'yeta2');
-INSERT INTO `user` VALUES ('3', 'yeta3');
-INSERT INTO `user` VALUES ('4', 'yeta4');
-INSERT INTO `user` VALUES ('5', 'ray1');
-INSERT INTO `user` VALUES ('6', 'ray2');
-INSERT INTO `user` VALUES ('7', 'yeta7');
-INSERT INTO `user` VALUES ('11', 'yeta11');
-INSERT INTO `user` VALUES ('12', 'yeta11');
+INSERT INTO `user` VALUES ('4', 'yeta1', 'yeta1', 'yeta1', '1806672430@qq.com', '1', '05d55cd5e35040eb9ef87f2256313ce8');

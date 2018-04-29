@@ -9,4 +9,6 @@ public interface MyUserMapper {
     User findUserById(Integer id);
 
     List<User> findUsers();
+
+    User findUserByCode(String code);
 }

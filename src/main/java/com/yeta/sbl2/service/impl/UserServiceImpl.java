@@ -6,6 +6,7 @@ import com.yeta.sbl2.mapper.UserMapper;
 import com.yeta.sbl2.pojo.User;
 import com.yeta.sbl2.service.UserService;
 import com.yeta.sbl2.utils.JsonUtils;
+import com.yeta.sbl2.utils.MailUtils;
 import com.yeta.sbl2.utils.MyResponse;
 import com.yeta.sbl2.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
+
+import javax.mail.MessagingException;
+import java.util.UUID;
 
 /**
  * 用户相关操作接口实现类
@@ -39,6 +43,12 @@ public class UserServiceImpl implements UserService {
      */
     @Autowired
     private RedisOperator redisOperator;
+
+    /**
+     * 注入自定义邮箱工具类
+     */
+    @Autowired
+    private MailUtils mailUtils;
 
     /**
      * 保存用户
@@ -176,6 +186,35 @@ public class UserServiceImpl implements UserService {
         MyResponse myResponse = new MyResponse();
         myResponse.setData(userMapper.selectByExample(example));
 
+        return myResponse;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public MyResponse register(User user) throws MessagingException {
+        //设置用户状态为：未激活
+        user.setState(false);
+        //设置认证码
+        user.setCode(UUID.randomUUID().toString().replace("-", ""));
+        //存入数据库
+        saveUser(user);
+        //发送激活邮件
+        mailUtils.sendMail(user.getEmail(), user.getCode());
+        //初始化返回对象
+        MyResponse myResponse = new MyResponse();
+        return myResponse;
+    }
+
+    @Override
+    public MyResponse active(String code) {
+        //根据激活码查询用户
+        User user = myUserMapper.findUserByCode(code);
+        if (user != null) {
+            //修改用户状态为：激活
+            user.setState(true);
+            updateUser(user);
+        }
+        MyResponse myResponse = new MyResponse();
         return myResponse;
     }
 }

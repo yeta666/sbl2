@@ -4,10 +4,9 @@ import com.yeta.sbl2.pojo.User;
 import com.yeta.sbl2.service.UserService;
 import com.yeta.sbl2.utils.MyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
 
 /**
  * 用户相关操作接口定义
@@ -55,5 +54,15 @@ public class UserController {
                                       @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                       User user) {
         return userService.queryUsersPaged(page, pageSize, user);
+    }
+
+    @PostMapping(value = "/register")
+    public MyResponse register(User user) throws MessagingException {
+        return userService.register(user);
+    }
+
+    @GetMapping(value = "/active")
+    public MyResponse active(@RequestParam(value = "code", required = true) String code) {
+        return userService.active(code);
     }
 }

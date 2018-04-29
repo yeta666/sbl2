@@ -212,6 +212,8 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             //修改用户状态为：激活
             user.setState(true);
+            //设置认证码为空
+            user.setCode(null);
             updateUser(user);
         }
         MyResponse myResponse = new MyResponse();

@@ -1,8 +1,9 @@
-package com.yeta.sbl2.utils;
+package com.yeta.sbl2.wechat.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.thoughtworks.xstream.XStream;
-import com.yeta.sbl2.domain.*;
+import com.yeta.sbl2.wechat.domain.*;
+import com.yeta.sbl2.utils.HttpUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -285,7 +286,7 @@ public class WechatMessageUtil {
         String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET"
                 .replace("APPID", APPID)
                 .replace("APPSECRET", APPSECRET);
-        return JsonUtil.jsonToPojo(httpUtil.doGetStr(accessTokenUrl), WechatAccessToken.class);
+        return (WechatAccessToken) JSON.parse(httpUtil.doGetStr(accessTokenUrl));
     }
 
     /**

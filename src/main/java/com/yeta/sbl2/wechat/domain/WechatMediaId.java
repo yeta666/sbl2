@@ -1,4 +1,4 @@
-package com.yeta.sbl2.domain;
+package com.yeta.sbl2.wechat.domain;
 
 /**
  * 微信媒体文件上传后，获取标识

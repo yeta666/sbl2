@@ -1,11 +1,11 @@
 package com.yeta.sbl2.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.yeta.sbl2.mapper.MyUserMapper;
 import com.yeta.sbl2.mapper.UserMapper;
 import com.yeta.sbl2.pojo.User;
 import com.yeta.sbl2.service.UserService;
-import com.yeta.sbl2.utils.JsonUtil;
 import com.yeta.sbl2.utils.MailUtil;
 import com.yeta.sbl2.utils.MyResponse;
 import com.yeta.sbl2.utils.RedisOperator;
@@ -110,9 +110,9 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectByPrimaryKey(id);
 
         //将user存如redis
-        redisOperator.set("user:" + user.getId().toString(), JsonUtil.objectToJson(user));
+        redisOperator.set("user:" + user.getId().toString(), JSON.toJSONString(user));
         //取出来
-        myResponse.setData(JsonUtil.jsonToPojo(redisOperator.get("user:" + user.getId().toString()), User.class));
+        myResponse.setData(JSON.parse(redisOperator.get("user:" + user.getId().toString())));
 
         return myResponse;
     }

@@ -1,4 +1,4 @@
-package com.yeta.sbl2.domain;
+package com.yeta.sbl2.wechat.domain;
 
 /**
  * 微信文本消息参数类

@@ -1,7 +1,7 @@
-package com.yeta.sbl2.service;
+package com.yeta.sbl2.wechat.service;
 
-import com.yeta.sbl2.domain.WechatCheckSignatureMessage;
-import org.dom4j.DocumentException;
+import com.yeta.sbl2.wechat.domain.WechatCheckSignatureMessage;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

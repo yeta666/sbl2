@@ -1,10 +1,10 @@
-package com.yeta.sbl2.service.impl;
+package com.yeta.sbl2.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.yeta.sbl2.domain.WechatCheckSignatureMessage;
-import com.yeta.sbl2.service.WechatService;
+import com.yeta.sbl2.wechat.domain.WechatCheckSignatureMessage;
+import com.yeta.sbl2.wechat.service.WechatService;
 import com.yeta.sbl2.utils.HttpUtil;
-import com.yeta.sbl2.utils.WechatMessageUtil;
+import com.yeta.sbl2.wechat.utils.WechatMessageUtil;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

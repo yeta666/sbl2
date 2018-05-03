@@ -1,7 +1,7 @@
-package com.yeta.sbl2.controller;
+package com.yeta.sbl2.wechat.controller;
 
-import com.yeta.sbl2.domain.WechatCheckSignatureMessage;
-import com.yeta.sbl2.service.WechatService;
+import com.yeta.sbl2.wechat.domain.WechatCheckSignatureMessage;
+import com.yeta.sbl2.wechat.service.WechatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package com.yeta.sbl2.domain;
+package com.yeta.sbl2.wechat.domain;
 
 import java.util.Arrays;
 

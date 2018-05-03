@@ -1,4 +1,4 @@
-package com.yeta.sbl2.domain;
+package com.yeta.sbl2.wechat.domain;
 
 /**
  * 检验签微信加密签名参数类

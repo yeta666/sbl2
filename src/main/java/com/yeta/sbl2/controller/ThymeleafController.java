@@ -14,4 +14,9 @@ public class ThymeleafController {
     public String home() {
         return "home";
     }
+
+    @RequestMapping(value = "/login")
+    public String login() {
+        return "login";
+    }
 }

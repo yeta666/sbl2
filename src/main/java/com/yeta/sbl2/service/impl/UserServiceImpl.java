@@ -5,8 +5,8 @@ import com.yeta.sbl2.mapper.MyUserMapper;
 import com.yeta.sbl2.mapper.UserMapper;
 import com.yeta.sbl2.pojo.User;
 import com.yeta.sbl2.service.UserService;
-import com.yeta.sbl2.utils.JsonUtils;
-import com.yeta.sbl2.utils.MailUtils;
+import com.yeta.sbl2.utils.JsonUtil;
+import com.yeta.sbl2.utils.MailUtil;
 import com.yeta.sbl2.utils.MyResponse;
 import com.yeta.sbl2.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
      * 注入自定义邮箱工具类
      */
     @Autowired
-    private MailUtils mailUtils;
+    private MailUtil mailUtil;
 
     /**
      * 保存用户
@@ -110,9 +110,9 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectByPrimaryKey(id);
 
         //将user存如redis
-        redisOperator.set("user:" + user.getId().toString(), JsonUtils.objectToJson(user));
+        redisOperator.set("user:" + user.getId().toString(), JsonUtil.objectToJson(user));
         //取出来
-        myResponse.setData(JsonUtils.jsonToPojo(redisOperator.get("user:" + user.getId().toString()), User.class));
+        myResponse.setData(JsonUtil.jsonToPojo(redisOperator.get("user:" + user.getId().toString()), User.class));
 
         return myResponse;
     }
@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
         //存入数据库
         saveUser(user);
         //发送激活邮件
-        mailUtils.sendMail(user.getEmail(), user.getCode());
+        mailUtil.sendMail(user.getEmail(), user.getCode());
         //初始化返回对象
         MyResponse myResponse = new MyResponse();
         return myResponse;

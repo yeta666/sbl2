@@ -20,7 +20,7 @@ public class TaskServiceImpl implements TaskService {
      * 定时任务测试
      */
     @Override
-    @Scheduled(fixedRate = 10000)        //每10秒执行一次
+    @Scheduled(fixedRate = 1000 * 60)        //每60秒执行一次
     public void scheduledTaskTest() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         System.out.println(simpleDateFormat.format(new Date()));

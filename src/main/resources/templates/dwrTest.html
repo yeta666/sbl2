@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="chatRoom"></div>
+<hr/>
+<input type="text" id="message"/>
+<button id="sendBtn">发送</button>
+
+<script type='text/javascript' src='/sbl2/dwr/util.js'></script>
+<script type='text/javascript' src='/sbl2/dwr/engine.js'></script>
+<script type='text/javascript' src='/sbl2/dwr/interface/DWRController.js'></script>
+<script type="text/javascript" src="/sbl2/js/jquery-2.1.0.js"></script>
+<script>
+    $(function () {
+        //页面加载时进行反转的激活
+        dwr.engine.setActiveReverseAjax(true);
+
+        DWRController.push();
+
+        //发送消息事件
+        $("#sendBtn").click(function () {
+            $message = $("#message").val();
+            if ($message == "") {
+                alert("请输入消息后重试！");
+            } else {
+                DWRController.chat($message);
+            }
+        });
+    })
+
+    //后台回调
+    function callback(data) {
+        $("#chatRoom").append($('<p>' + data + '</p>'));
+    }
+</script>
+</body>
+</html>

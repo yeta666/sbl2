@@ -5,9 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
@@ -19,6 +23,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableAsync
 //
 @ImportResource(locations = "classpath:config/dwrConfig.xml")
+@Configuration
 public class Sbl2Application {
 
 	public static void main(String[] args) {
@@ -39,5 +44,24 @@ public class Sbl2Application {
 		//允许远程调用JS
 		registrationBean.addInitParameter("allowScriptTagRemoting", "true");
 		return registrationBean;
+	}
+
+	/**
+	 * 设置跨域
+	 * @return
+	 */
+	private CorsConfiguration buildConfig() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.addAllowedOrigin("*");	// 1允许任何域名使用
+		corsConfiguration.addAllowedHeader("*");	// 2允许任何头
+		corsConfiguration.addAllowedMethod("*");	// 3允许任何方法（post、get等）
+		return corsConfiguration;
+	}
+
+	@Bean
+	public CorsFilter corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", buildConfig());
+		return new CorsFilter(source);
 	}
 }

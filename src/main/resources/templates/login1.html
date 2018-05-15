@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login1</title>
+</head>
+<body>
+
+    <center>
+        <span>用户名：</span><input type="text" name="username" id="username" />
+        <span>密码：</span><input type="text" name="password" id="password" />
+        <input type="button" id="loginBtn" value="登陆" />
+    </center>
+
+
+    <!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
+    <script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+            $("#loginBtn").click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "/sbl2/login_out/login",
+                    data: {
+                        "username": $("#username").val().trim(),
+                        "password": $("#password").val().trim()
+                    },
+                    dataType: "JSON",
+                    success: function(data) {
+
+                    },
+                    error: function(XHR) {
+                        alert(XHR.status);
+                    }
+                });
+            });
+         });
+    </script>
+</body>
+</html>

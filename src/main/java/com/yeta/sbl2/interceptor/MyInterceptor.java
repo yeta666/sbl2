@@ -3,6 +3,7 @@ package com.yeta.sbl2.interceptor;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,7 +23,25 @@ public class MyInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("请求URI：" + request.getRequestURI() + "，请求URL：" + request.getRequestURL());
+        //获取cookie，验证是否已经登陆
+        /*String uri = request.getServletPath();
+        if (!"/login1".equals(uri) || !"/login_out/login".equals(uri)) {
+            if (request.getCookies() != null) {
+                Cookie[] cookies = request.getCookies();
+                for (Cookie cookie : cookies) {
+                    if ("login".equals(cookie.getName()) && "true".equals(cookie.getValue())) {
+                        //放行到请求URI
+
+                    }else {
+                        //重定向到登陆页面
+                        response.sendRedirect("login1");
+                    }
+                }
+            }else {
+                //重定向到登陆页面
+                response.sendRedirect("login1");
+            }
+        }*/
         return true;
     }
 

@@ -24,4 +24,9 @@ public class ThymeleafController {
     public String dwrTest() {
         return "dwrTest";
     }
+
+    @RequestMapping(value = "/login1")
+    public String login1() {
+        return "login1";
+    }
 }

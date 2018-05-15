@@ -9,6 +9,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * AOP
@@ -35,6 +36,9 @@ public class MyAspect {
         logger.info("ip={}", request.getRemoteAddr());
         logger.info("classMethod={}", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         logger.info("args={}", joinPoint.getArgs());
+        HttpServletResponse response = requestAttributes.getResponse();
+        //设置哪url可以跨域请求到本域
+        //response.setHeader("Access-Control-Allow-Origin", "*");
     }
 
     @After("log()")

@@ -9,6 +9,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class MyResponse {
 
     /**
+     * 请求是否成功
+     */
+    private boolean success = true;
+
+    /**
      * 数据
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,6 +26,14 @@ public class MyResponse {
     private String message;
 
     public MyResponse() {
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public Object getData() {
@@ -42,8 +55,9 @@ public class MyResponse {
     @Override
     public String toString() {
         return "MyResponse{" +
-                "data=" + data +
-                ", messageHandle='" + message + '\'' +
+                "success=" + success +
+                ", data=" + data +
+                ", message='" + message + '\'' +
                 '}';
     }
 }

@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 用户相关操作接口定义
@@ -64,5 +68,24 @@ public class UserController {
     @GetMapping(value = "/active")
     public MyResponse active(@RequestParam(value = "code", required = true) String code) {
         return userService.active(code);
+    }
+
+    @PostMapping(value = "/login")
+    public MyResponse login(@RequestParam(value = "username", required = true) String username,
+                            @RequestParam(value = "password", required = true) String password,
+                            HttpServletRequest request,
+                            HttpServletResponse response) throws IOException {
+        return userService.login(username, password, request, response);
+    }
+
+    @GetMapping(value = "/logout")
+    public MyResponse logout(HttpServletRequest request,
+                            HttpServletResponse response) throws IOException {
+        return userService.logout(request, response);
+    }
+
+    @GetMapping(value = "/getMenu")
+    public MyResponse getMenu(HttpServletRequest request, HttpServletResponse response) {
+        return userService.getMenu(request, response);
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yeta.sbl2.mapper.MyUserRoleMapper" >
+    <select id="findUserRoleByUserId" resultType="com.yeta.sbl2.pojo.UserRole" parameterType="java.lang.Integer">
+        SELECT
+          id,
+          userId,
+          roleId
+        FROM
+          user_role
+        WHERE
+          userId = #{userId}
+    </select>
+</mapper>

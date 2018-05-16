@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class MyAspect {
 
-    private final static Logger logger = LoggerFactory.getLogger(MyAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(MyAspect.class);
 
     @Pointcut("execution(public * com.yeta.sbl2.controller.*.*(..))")
     public void log() {

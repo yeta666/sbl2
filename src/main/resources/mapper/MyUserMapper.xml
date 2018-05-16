@@ -9,7 +9,9 @@
             name,
             email,
             state,
-            code FROM user WHERE id = #{id}
+            code
+        FROM user
+        WHERE id = #{id}
     </select>
 
     <select id="findUsers" resultType="com.yeta.sbl2.pojo.User">
@@ -30,5 +32,17 @@
             email,
             state,
             code FROM user WHERE code = #{code}
+    </select>
+
+    <select id="findUserByUsername" resultType="com.yeta.sbl2.pojo.User" parameterType="java.lang.String">
+        SELECT id,
+            username,
+            password,
+            name,
+            email,
+            state,
+            code
+        FROM user
+        WHERE username = #{username}
     </select>
 </mapper>

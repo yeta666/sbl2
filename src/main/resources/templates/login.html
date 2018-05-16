@@ -1,11 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>登陆</title>
+    <title>login1</title>
 </head>
 <body>
-    <a href="/sbl2/wechat/login">微信授权登陆</a>
+
+<form>
+    <span>用户名：</span><input type="text" id="username"/>
+    <span>密码：</span><input type="text" id="password"/>
+    <input type="button" id="loginBtn" value="登陆"/>
+</form>
+
+<!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
+<script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $("#loginBtn").click(function () {
+            //请求登陆
+            $.ajax({
+                type: "POST",
+                url: "/sbl2/user/login",
+                data: {
+                    "username": $("#username").val().trim(),
+                    "password": $("#password").val().trim()
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.success) {
+                        window.location.href = "/sbl2" + data.data;
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function (XHR) {
+                    alert(XHR.status);
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

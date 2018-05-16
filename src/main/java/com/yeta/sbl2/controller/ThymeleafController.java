@@ -15,9 +15,9 @@ public class ThymeleafController {
         return "home";
     }
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/wechatLogin")
     public String login() {
-        return "login";
+        return "wechatLogin";
     }
 
     @RequestMapping(value = "/dwrTest")
@@ -25,8 +25,8 @@ public class ThymeleafController {
         return "dwrTest";
     }
 
-    @RequestMapping(value = "/login1")
+    @RequestMapping(value = "/login")
     public String login1() {
-        return "login1";
+        return "login";
     }
 }

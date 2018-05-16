@@ -4,6 +4,8 @@ import com.yeta.sbl2.pojo.User;
 import com.yeta.sbl2.utils.MyResponse;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户service
@@ -29,4 +31,9 @@ public interface UserService {
 
     MyResponse active(String code);
 
+    MyResponse login(String username, String password, HttpServletRequest request, HttpServletResponse response);
+
+    MyResponse logout(HttpServletRequest request, HttpServletResponse response);
+
+    MyResponse getMenu(HttpServletRequest request, HttpServletResponse response);
 }

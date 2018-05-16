@@ -2,9 +2,15 @@ package com.yeta.sbl2.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
+import com.yeta.sbl2.mapper.MyFunctionMapper;
+import com.yeta.sbl2.mapper.MyRoleFunctionMapper;
 import com.yeta.sbl2.mapper.MyUserMapper;
 import com.yeta.sbl2.mapper.UserMapper;
+import com.yeta.sbl2.mapper.MyUserRoleMapper;
+import com.yeta.sbl2.pojo.Function;
+import com.yeta.sbl2.pojo.RoleFunction;
 import com.yeta.sbl2.pojo.User;
+import com.yeta.sbl2.pojo.UserRole;
 import com.yeta.sbl2.service.UserService;
 import com.yeta.sbl2.utils.MailUtil;
 import com.yeta.sbl2.utils.MyResponse;
@@ -17,6 +23,11 @@ import org.thymeleaf.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,6 +48,15 @@ public class UserServiceImpl implements UserService {
      */
     @Autowired
     private MyUserMapper myUserMapper;
+
+    @Autowired
+    private MyUserRoleMapper myUserRoleMapper;
+
+    @Autowired
+    private MyRoleFunctionMapper myRoleFunctionMapper;
+
+    @Autowired
+    private MyFunctionMapper myFunctionMapper;
 
     /**
      * 注入自定义的Redis封装操作类
@@ -189,6 +209,12 @@ public class UserServiceImpl implements UserService {
         return myResponse;
     }
 
+    /**
+     * 注册用户名方法
+     * @param user
+     * @return
+     * @throws MessagingException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public MyResponse register(User user) throws MessagingException {
@@ -205,6 +231,11 @@ public class UserServiceImpl implements UserService {
         return myResponse;
     }
 
+    /**
+     * 激活用户名方法
+     * @param code
+     * @return
+     */
     @Override
     public MyResponse active(String code) {
         //根据激活码查询用户
@@ -218,5 +249,121 @@ public class UserServiceImpl implements UserService {
         }
         MyResponse myResponse = new MyResponse();
         return myResponse;
+    }
+
+    /**
+     * 登陆方法
+     * @param username
+     * @param password
+     * @param request
+     * @param response
+     * @return
+     */
+    @Override
+    public MyResponse login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
+
+        //初始化返回结果
+        MyResponse myResponse = new MyResponse();
+
+        //根据用户名去数据库中查找
+        User user = myUserMapper.findUserByUsername(username);
+
+        if (user != null && user.getPassword() != null && password.equals(user.getPassword())) {
+            //用户名存在且密码正确
+            //写cookie
+            String cookieValue = "true#" + user.getId().toString() + "#" + user.getName();
+            System.out.println(cookieValue);
+            Cookie cookie = new Cookie("sbl2Login", cookieValue);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+
+            //设置返回结果
+            myResponse.setData("/home");
+        } else {
+            //用户名不存在或密码错误
+            myResponse.setSuccess(false);
+            myResponse.setMessage("用户名或密码错误！");
+        }
+        return myResponse;
+    }
+
+    /**
+     * 注销方法
+     * @param request
+     * @param response
+     * @return
+     */
+    @Override
+    public MyResponse logout(HttpServletRequest request, HttpServletResponse response) {
+
+        //初始化返回结果
+        MyResponse myResponse = new MyResponse();
+
+        //清除cookie
+        if (request.getCookies() != null) {
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if ("sbl2Login".equals(cookie.getName())) {
+                    Cookie newCookie = new Cookie("sbl2Login", "false");
+                    newCookie.setPath("/");
+                    newCookie.setMaxAge(0);
+                    response.addCookie(newCookie);
+                }
+            }
+        }
+
+        myResponse.setSuccess(true);
+        myResponse.setData("/login");
+
+        return myResponse;
+    }
+
+    /**
+     * 根据权限获取功能
+     * @param request
+     * @param response
+     * @return
+     */
+    @Override
+    public MyResponse getMenu(HttpServletRequest request, HttpServletResponse response) {
+
+        //初始化返回结果
+        MyResponse myResponse = new MyResponse();
+
+        //初始化功能列表
+        List<Function> functionList = new ArrayList<>();
+
+        //从cookie中获取用户id
+        if (request.getCookies() != null) {
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if ("sbl2Login".equals(cookie.getName())) {
+                    Integer userId = Integer.valueOf(cookie.getValue().split("#")[1]);
+                    //根据用户id获取用户对应的角色id
+                    List<UserRole> userRoleList = myUserRoleMapper.findUserRoleByUserId(userId);
+                    //遍历
+                    for (UserRole userRole : userRoleList) {
+                        Integer roleId = userRole.getRoleid();
+                        //根据角色id获取角色对应的功能id
+                        List<RoleFunction> roleFunctionList = myRoleFunctionMapper.findRoleFunctionByRoleId(roleId);
+                        //遍历
+                        for (RoleFunction roleFunction : roleFunctionList) {
+                            Integer functionId = roleFunction.getFunctionid();
+                            //根据功能id获取功能
+                            Function function = myFunctionMapper.findFunctionById(functionId);
+                            functionList.add(function);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (functionList.size() == 0) {
+            myResponse.setSuccess(false);
+            myResponse.setMessage("该用户没有对应功能！");
+        } else {
+            myResponse.setData(functionList);
+        }
+        return  myResponse;
     }
 }

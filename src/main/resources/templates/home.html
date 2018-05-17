@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>home</title>
+    <style type="text/css">
+
+    </style>
 </head>
 <body>
 
     <input type="button" id="logoutBtn" value="注销" />
 
     <br/>
+
+    <ul id="menu"></ul>
 
     <!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
     <script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
@@ -23,7 +28,16 @@
                 dataType: "JSON",
                 success: function(data) {
                     if (data.success) {
-                        console.log(data);
+                        console.log(data.data);
+                        for (var i = 0; i < data.data.length; i++) {
+                            $li = $('<li>' + data.data[i].name + '</li>')
+                            $ol = $('<ol></ol>');
+                            for (var j = 0; j < data.data[i].menuLevel2.length; j++) {
+                                $ol.append($('<li><a href="'+data.data[i].menuLevel2[j].url+'">'+data.data[i].menuLevel2[j].name+'</a></li>'));
+                            }
+                            $li.append($ol);
+                            $("#menu").append($li);
+                        }
                     }else {
                         alert(data.message);
                     }

@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yeta.sbl2.mapper.RoleFunctionMapper" >
-  <resultMap id="BaseResultMap" type="com.yeta.sbl2.pojo.RoleFunction" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeta.sbl2.mapper.RoleFunctionMapper">
+  <resultMap id="BaseResultMap" type="com.yeta.sbl2.pojo.RoleFunction">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="roleId" property="roleid" jdbcType="INTEGER" />
-    <result column="functionId" property="functionid" jdbcType="INTEGER" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="roleId" jdbcType="INTEGER" property="roleid" />
+    <result column="functionId" jdbcType="INTEGER" property="functionid" />
   </resultMap>
 </mapper>

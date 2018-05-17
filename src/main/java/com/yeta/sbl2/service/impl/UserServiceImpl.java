@@ -26,9 +26,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 用户相关操作接口实现类
@@ -358,11 +356,36 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (functionList.size() == 0) {
+        //初始化菜单
+        List<Map<String, Object>> menu = new ArrayList<>();
+
+        //加入一级菜单
+        for (Function function : functionList) {
+            if (function.getParentid() == -1 && function.getLevel() == 1) {     //一级菜单
+                Map<String, Object> menuLevel1 = new HashMap<>();
+                menuLevel1.put("id", function.getId());
+                menuLevel1.put("name", function.getName());
+                menuLevel1.put("url", function.getUrl());
+                menu.add(menuLevel1);
+            }
+        }
+
+        //加入一级菜单对应的二级菜单
+        for (Map<String, Object> menuLevel1 : menu) {
+            List<Function> menuLevel2 = new ArrayList<>();
+            for (Function function : functionList) {
+                if (function.getParentid() == menuLevel1.get("id")) {       //是该一级菜单对应的二级菜单
+                    menuLevel2.add(function);
+                }
+            }
+            menuLevel1.put("menuLevel2", menuLevel2);
+        }
+
+        if (menu.size() == 0) {
             myResponse.setSuccess(false);
-            myResponse.setMessage("该用户没有对应功能！");
+            myResponse.setMessage("该用户没有对应的菜单！");
         } else {
-            myResponse.setData(functionList);
+            myResponse.setData(menu);
         }
         return  myResponse;
     }

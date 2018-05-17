@@ -13,10 +13,7 @@ public class Function {
 
     private String url;
 
-    @Column(name = "serialNum")
-    private Integer serialnum;
-
-    private Integer accordion;
+    private Integer level;
 
     /**
      * @return id
@@ -75,42 +72,16 @@ public class Function {
     }
 
     /**
-     * @return serialNum
+     * @return level
      */
-    public Integer getSerialnum() {
-        return serialnum;
+    public Integer getLevel() {
+        return level;
     }
 
     /**
-     * @param serialnum
+     * @param level
      */
-    public void setSerialnum(Integer serialnum) {
-        this.serialnum = serialnum;
-    }
-
-    /**
-     * @return accordion
-     */
-    public Integer getAccordion() {
-        return accordion;
-    }
-
-    /**
-     * @param accordion
-     */
-    public void setAccordion(Integer accordion) {
-        this.accordion = accordion;
-    }
-
-    @Override
-    public String toString() {
-        return "Function{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", parentid=" + parentid +
-                ", url='" + url + '\'' +
-                ", serialnum=" + serialnum +
-                ", accordion=" + accordion +
-                '}';
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

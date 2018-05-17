@@ -54,4 +54,13 @@ public class RoleFunction {
     public void setFunctionid(Integer functionid) {
         this.functionid = functionid;
     }
+
+    @Override
+    public String toString() {
+        return "RoleFunction{" +
+                "id=" + id +
+                ", roleid=" + roleid +
+                ", functionid=" + functionid +
+                '}';
+    }
 }

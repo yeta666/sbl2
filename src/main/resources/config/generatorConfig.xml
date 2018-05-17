@@ -30,11 +30,13 @@
         <javaClientGenerator targetPackage="com.yeta.sbl2.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="user"></table>
+        <!--<table tableName="user"></table>
         <table tableName="role"></table>
         <table tableName="user_role"></table>
         <table tableName="function"></table>
         <table tableName="role_function"></table>
+        <table tableName="seckill"></table>
+        <table tableName="seckill_successed"></table>-->
 
     </context>
 </generatorConfiguration>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yeta.sbl2.mapper.MySeckillMapper" >
+    <select id="findAllSeckill" resultType="com.yeta.sbl2.pojo.Seckill">
+        SELECT
+          id, name, number, startTime, endTime, createTime
+        FROM seckill
+    </select>
+
+    <select id="findById" resultType="com.yeta.sbl2.pojo.Seckill" parameterType="java.lang.Integer">
+        SELECT
+          id, name, number, startTime, endTime, createTime
+        FROM seckill
+        WHERE id = #{id}
+    </select>
+
+    <update id="reduceNumber">
+        UPDATE
+          seckill
+        SET
+          number = number - 1
+        WHERE
+          number > 0
+        AND
+          id = #{id}
+        AND
+          startTime <![CDATA[ <= ]]> #{killTime}
+        AND
+          endTime >= #{killTime}
+    </update>
+</mapper>

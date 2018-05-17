@@ -84,4 +84,15 @@ public class Function {
     public void setLevel(Integer level) {
         this.level = level;
     }
+
+    @Override
+    public String toString() {
+        return "Function{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", parentid=" + parentid +
+                ", url='" + url + '\'' +
+                ", level=" + level +
+                '}';
+    }
 }

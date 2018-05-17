@@ -52,7 +52,7 @@ request.getHeader("X-Requested-With") != null && "XMLHttpRequest".equals(request
 1. 依赖
 2. generatorConfig.xml：反序列化配置
 3. MyMapper：通用mapper配置
-4. aoolication.properties：配置mybatis、通用mapper、pagehelper分页插件
+4. application.properties：配置mybatis、通用mapper、pagehelper分页插件
 5. GeneratorDisplay：反序列化自动生成pojo、mapper类、mapper.xml
 6. 自定义mapper实现：自己写一个mapper类、一个mapper.xml
 7. 增、删、改事务用@Transactional(propagation = Propagation.SUPPORTS)、查事务用@Transactional(propagation = Propagation.SUPPORTS)，遇到错误可回滚

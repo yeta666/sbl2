@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yeta.sbl2.mapper.MySeckillSuccessedMapper" >
+    <select id="findSeckillSuccessedBySeckillIdAndUsername" resultType="com.yeta.sbl2.pojo.SeckillSuccessed">
+        SELECT
+          ss.seckillId, ss.username, ss.name, ss.state, ss.createTime,
+          s.id "seckill.id", s.name "seckill.name", s.number "seckill.number", s.startTime "seckill.startTime", s.endTime "seckill.endTime", s.createTime "seckill.createTime"
+        FROM
+          seckill_successed ss, seckill s
+        WHERE
+          ss.seckillId = s.id
+        AND
+          ss.seckillId = #{seckillId}
+        AND
+          ss.username = #{username}
+    </select>
+
+    <insert id="insertSeckillSuccessed" >
+        INSERT ignore INTO    /*主键冲突的时候忽略，不然要报错*/
+          seckill_successed (seckillId, username, name, state)
+        VALUES
+          (#{seckillId}, #{username}, #{name}, #{state})
+    </insert>
+</mapper>

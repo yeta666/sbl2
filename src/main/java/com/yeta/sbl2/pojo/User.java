@@ -115,4 +115,17 @@ public class User {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", state=" + state +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }

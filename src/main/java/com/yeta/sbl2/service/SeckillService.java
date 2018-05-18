@@ -1,9 +1,7 @@
 package com.yeta.sbl2.service;
 
-import com.yeta.sbl2.pojo.Seckill;
-import com.yeta.sbl2.pojo.SeckillSuccessed;
-
-import java.util.List;
+import com.yeta.sbl2.utils.MyResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author YETA
@@ -11,13 +9,34 @@ import java.util.List;
  */
 public interface SeckillService {
 
-    List<Seckill> findAllSeckill();
+    /**
+     * 查询所有秒杀信息
+     * @return
+     */
+    MyResponse findAllSeckill();
 
-    Seckill findById(Integer id);
+    /**
+     * 根据id查询秒杀信息
+     * @param id
+     * @return
+     */
+    MyResponse findSeckillById(Integer id);
 
-    int reduceNumber(Integer id);
+    /**
+     * 获取秒杀地址
+     * 秒杀开启的时候返回地址
+     * 秒杀关闭的时候返回秒杀开启时间
+     * @param id
+     */
+    MyResponse getSeckillUrl(Integer id);
 
-    List<SeckillSuccessed> findSeckillSuccessedBySeckillIdAndUsername(Integer seckillId, String username);
+    /**
+     * 秒杀
+     * @param id
+     * @param url
+     * @param request
+     * @return
+     */
+    MyResponse seckill(Integer id, String url, HttpServletRequest request);
 
-    int insertSeckillSuccessed();
 }

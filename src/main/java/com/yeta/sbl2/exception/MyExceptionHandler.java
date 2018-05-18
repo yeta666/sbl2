@@ -21,6 +21,7 @@ public class MyExceptionHandler {
     public MyResponse defaultExceptionHandler(Exception e) throws Exception {
         e.printStackTrace();
         MyResponse myResponse = new MyResponse();
+        myResponse.setSuccess(false);
         myResponse.setMessage(e.getMessage());
         return myResponse;
     }

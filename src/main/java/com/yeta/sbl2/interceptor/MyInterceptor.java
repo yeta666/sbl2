@@ -2,6 +2,7 @@ package com.yeta.sbl2.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class MyInterceptor implements HandlerInterceptor {
 
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MyInterceptor.class);
 
     /**
@@ -23,7 +27,8 @@ public class MyInterceptor implements HandlerInterceptor {
     private static final String[] PERMIT_URI = {
             "/login",
             "/user/login",
-            "/js/jquery-2.1.0.js"
+            "/js/jquery-2.1.0.js",
+            "/js/jquery.cookie.js"
     };
 
     /**
@@ -45,6 +50,7 @@ public class MyInterceptor implements HandlerInterceptor {
         for (String permit : PERMIT_URI) {
             if (permit.equals(uri)) {
                 permitFlag = true;
+                break;
             }
         }
 
@@ -53,25 +59,28 @@ public class MyInterceptor implements HandlerInterceptor {
         }else {
             if (request.getCookies() != null) {
                 Cookie[] cookies = request.getCookies();
+                boolean isLogin = false;
                 for (Cookie cookie : cookies) {
                     if ("sbl2Login".equals(cookie.getName()) && "true".equals(cookie.getValue().split("#")[0])) {
-                        //放行到请求URI
-                        LOGGER.info("请求访问：" + uri + "，已登录，放行！");
-                        return true;
-                    } else {
-                        //重定向到登陆页面
-                        LOGGER.info("请求访问：" + uri + "，未登录，拦截！");
-                        response.sendRedirect("login");
-                        return false;
+                        isLogin = true;
                     }
+                }
+                if (isLogin) {
+                    //放行到请求URI
+                    LOGGER.info("请求访问：" + uri + "，已登录，放行！");
+                    return true;
+                } else {
+                    //重定向到登陆页面
+                    LOGGER.info("请求访问：" + uri + "，未登录，拦截！");
+                    response.sendRedirect(contextPath + "login");
+                    return false;
                 }
             } else {
                 //重定向到登陆页面
                 LOGGER.info("请求访问：" + uri + "，未登录，拦截！");
-                response.sendRedirect("login");
+                response.sendRedirect(contextPath + "login");
                 return false;
             }
-            return false;
         }
     }
 

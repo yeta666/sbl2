@@ -16,6 +16,7 @@ import com.yeta.sbl2.utils.MailUtil;
 import com.yeta.sbl2.utils.MyResponse;
 import com.yeta.sbl2.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,15 +36,12 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements UserService {
 
-    /**
-     * 注入userMapper
-     */
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     @Autowired
     private UserMapper userMapper;
 
-    /**
-     * 注入自定义userMapper
-     */
     @Autowired
     private MyUserMapper myUserMapper;
 
@@ -269,14 +267,13 @@ public class UserServiceImpl implements UserService {
         if (user != null && user.getPassword() != null && password.equals(user.getPassword())) {
             //用户名存在且密码正确
             //写cookie
-            String cookieValue = "true#" + user.getId().toString() + "#" + user.getName();
-            System.out.println(cookieValue);
+            String cookieValue = "true#" + user.getId().toString() + "#" + user.getUsername() + "#" + user.getName();
             Cookie cookie = new Cookie("sbl2Login", cookieValue);
             cookie.setPath("/");
             response.addCookie(cookie);
 
             //设置返回结果
-            myResponse.setData("/home");
+            myResponse.setData(contextPath + "/home");
         } else {
             //用户名不存在或密码错误
             myResponse.setSuccess(false);
@@ -311,7 +308,7 @@ public class UserServiceImpl implements UserService {
         }
 
         myResponse.setSuccess(true);
-        myResponse.setData("/login");
+        myResponse.setData(contextPath + "/login");
 
         return myResponse;
     }

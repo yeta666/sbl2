@@ -1,61 +1,148 @@
 package com.yeta.sbl2.service.impl;
 
+import com.yeta.sbl2.exception.SeckillCloseException;
+import com.yeta.sbl2.exception.SeckillException;
+import com.yeta.sbl2.exception.SeckillRepeatException;
 import com.yeta.sbl2.mapper.MySeckillMapper;
 import com.yeta.sbl2.mapper.MySeckillSuccessedMapper;
 import com.yeta.sbl2.pojo.Seckill;
 import com.yeta.sbl2.pojo.SeckillSuccessed;
 import com.yeta.sbl2.service.SeckillService;
+import com.yeta.sbl2.utils.MD5Util;
+import com.yeta.sbl2.utils.MyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 /**
+ * 秒杀相关逻辑处理
  * @author YETA
  * @date 2018/05/17/17:10
  */
 @Service
 public class SeckillServiceImpl implements SeckillService {
 
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     @Autowired
     private MySeckillMapper mySeckillMapper;
 
     @Autowired
     private MySeckillSuccessedMapper mySeckillSuccessedMapper;
+    
+    private static final String SECKILL_NOT_FOUND = "未获取到秒杀信息！";
+
+    private static final String SECKILL_CLOSE = "秒杀未开启！";
+
+    private static final String SECKILL_MD5_ERROR = "秒杀凭据错误！";
+
+    private static final String SECKILL_REPEAT = "重复秒杀！";
+
+    private static final String SECKILL_SUCCESS = "秒杀成功！";
 
     @Override
-    public List<Seckill> findAllSeckill() {
-        return mySeckillMapper.findAllSeckill();
+    public MyResponse findAllSeckill() {
+
+        //查询数据库
+        List<Seckill> seckillList = mySeckillMapper.findAllSeckill();
+
+        if (seckillList == null || seckillList.size() == 0) {
+            throw new SeckillException(SECKILL_NOT_FOUND);
+        }
+
+        return new MyResponse(seckillList);
+
     }
 
     @Override
-    public Seckill findById(Integer id) {
-        return mySeckillMapper.findById(id);
+    public MyResponse findSeckillById(Integer id) {
+
+        //查询数据库
+        Seckill seckill = mySeckillMapper.findById(id);
+
+        if (seckill == null) {
+            throw new SeckillException(SECKILL_NOT_FOUND);
+        }
+
+        return new MyResponse(seckill);
     }
 
     @Override
-    public int reduceNumber(Integer id) {
-        Date killTime = new Date();
-        System.out.println(killTime);
-        return mySeckillMapper.reduceNumber(id, killTime);
+    public MyResponse getSeckillUrl(Integer id) {
+
+        //获取秒杀信息
+        Seckill seckill = mySeckillMapper.findById(id);
+
+        //判断是否获取到秒杀信息
+        if (seckill == null) {
+            throw new SeckillException(SECKILL_NOT_FOUND);
+        }
+
+        //判断当前是否是秒杀时间
+        Date nowTime = new Date();
+        Date startTime = seckill.getStartTime();
+        Date endTime = seckill.getEndTime();
+        if (nowTime.getTime() < startTime.getTime() || nowTime.getTime() > endTime.getTime()) {
+            throw new SeckillCloseException(SECKILL_CLOSE);
+        }
+
+        return new MyResponse(id + "/" + MD5Util.getMd5(id.toString()));
     }
 
     @Override
-    public List<SeckillSuccessed> findSeckillSuccessedBySeckillIdAndUsername(Integer seckillId, String username) {
-        return mySeckillSuccessedMapper.findSeckillSuccessedBySeckillIdAndUsername(seckillId, username);
+    @Transactional      //开启事务
+    public MyResponse seckill(Integer id, String md5, HttpServletRequest request) {
+
+        if (md5 == null || !md5.equals(MD5Util.getMd5(id.toString()))) {
+            throw new SeckillException(SECKILL_MD5_ERROR);
+        }
+
+        //查询秒杀记录
+        Seckill seckill = mySeckillMapper.findById(id);
+
+        //判断是否获取到秒杀信息
+        if (seckill == null) {
+            throw new SeckillException(SECKILL_NOT_FOUND);
+        }
+
+        //减库存
+        int reduceResult = mySeckillMapper.reduceNumber(id, new Date());
+
+        if (reduceResult < 1) {
+            throw new SeckillCloseException(SECKILL_CLOSE);
+        }
+
+        //从cookie中获取用户名和用户姓名
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if ("sbl2Login".equals(cookie.getName())) {
+                //插入秒杀成功信息
+                SeckillSuccessed seckillSuccessed = new SeckillSuccessed();
+                seckillSuccessed.setSeckillId(id);
+                seckillSuccessed.setUsername(cookie.getValue().split("#")[2]);
+                seckillSuccessed.setName(cookie.getValue().split("#")[3]);
+                seckillSuccessed.setState(0);
+                int insertResult = mySeckillSuccessedMapper.insertSeckillSuccessed(seckillSuccessed);
+
+                if (insertResult < 1) {
+                    throw new SeckillRepeatException(SECKILL_REPEAT);       //回滚
+                }
+
+                break;
+            }
+        }
+
+        return new MyResponse(SECKILL_SUCCESS);
+
     }
 
-    @Override
-    public int insertSeckillSuccessed() {
-
-        SeckillSuccessed seckillSuccessed = new SeckillSuccessed();
-        seckillSuccessed.setSeckillId(1);
-        seckillSuccessed.setUsername("yeta2");
-        seckillSuccessed.setName("yeta2");
-        seckillSuccessed.setState(1);
-
-        return mySeckillSuccessedMapper.insertSeckillSuccessed(seckillSuccessed);
-    }
 }

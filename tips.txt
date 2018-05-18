@@ -91,3 +91,6 @@ request.getHeader("X-Requested-With") != null && "XMLHttpRequest".equals(request
 			监控管理、通知管理、代码生成
 2. 下载网站：https://gitee.com/naan1993/guns
 3. 打包：mvn clean package -Dmaven.test.skip=true
+
+#####日志：
+1. slf4j是规范/接口，而log4j等...是具体的实现

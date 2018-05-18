@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static org.junit.Assert.*;
 
 /**
  * @author YETA
- * @date 2018/05/17/17:15
+ * @date 2018/05/18/20:27
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -26,23 +28,18 @@ public class SeckillServiceImplTest {
     }
 
     @Test
-    public void findById() throws Exception {
-        System.out.println(seckillService.findById(1));
+    public void findSeckillById() throws Exception {
+        System.out.println(seckillService.findSeckillById(1));
     }
 
     @Test
-    public void reduceNumber() throws Exception {
-        System.out.println(seckillService.reduceNumber(1));
+    public void getSeckillUrl() throws Exception {
+        System.out.println(seckillService.getSeckillUrl(1));
     }
 
     @Test
-    public void findSeckillSuccessedBySeckillId() throws Exception {
-        System.out.println(seckillService.findSeckillSuccessedBySeckillIdAndUsername(1, "yeta1"));
-    }
+    public void seckill() throws Exception {
 
-    @Test
-    public void insertSeckillSuccessed() throws Exception {
-        System.out.println(seckillService.insertSeckillSuccessed());
     }
 
 }

@@ -28,6 +28,10 @@ public class MyResponse {
     public MyResponse() {
     }
 
+    public MyResponse(Object data) {
+        this.data = data;
+    }
+
     public boolean isSuccess() {
         return success;
     }

@@ -3,6 +3,7 @@ package com.yeta.sbl2.pojo;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
@@ -23,13 +24,13 @@ public class Seckill {
     private Integer number;
 
     @Column(name = "startTime")
-    private Timestamp startTime;
+    private Date startTime;
 
     @Column(name = "endTime")
-    private Timestamp endTime;
+    private Date endTime;
 
     @Column(name = "createTime")
-    private Timestamp createTime;
+    private Date createTime;
 
     public Seckill() {
     }
@@ -58,27 +59,27 @@ public class Seckill {
         this.number = number;
     }
 
-    public Timestamp getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

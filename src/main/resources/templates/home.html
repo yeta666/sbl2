@@ -9,66 +9,183 @@
 </head>
 <body>
 
-    <input type="button" id="logoutBtn" value="注销" />
+<input type="button" id="logoutBtn" value="注销"/>
 
-    <br/>
+<br/>
 
-    <ul id="menu"></ul>
+<ul id="menu"></ul>
 
-    <br />
+<br/>
 
-    <!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
-    <script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" charset="utf-8">
-        $(function() {
+<table>
+    <thead>
+    <tr>
+        <th>序号</th>
+        <th>描述</th>
+        <th>剩余</th>
+        <th>开始时间</th>
+        <th>结束时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="seckills"></tbody>
+</table>
 
-            //获取菜单
+<br/>
+
+<div id="seckill"></div>
+
+<!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
+<script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="/sbl2/js/jquery.countdown.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    //封装AJAX请求
+    var AJAX = {
+        request: function (type, url, data, handler) {
             $.ajax({
-                type: "GET",
-                url: "/sbl2/user/getMenu",
-                data: {},
+                type: type,
+                url: url,
+                data: data,
                 dataType: "JSON",
-                success: function(data) {
+                success: function (data) {
                     if (data.success) {
-                        console.log(data.data);
-                        for (var i = 0; i < data.data.length; i++) {
-                            $li = $('<li>' + data.data[i].name + '</li>')
-                            $ol = $('<ol></ol>');
-                            for (var j = 0; j < data.data[i].menuLevel2.length; j++) {
-                                $ol.append($('<li><a href="'+data.data[i].menuLevel2[j].url+'">'+data.data[i].menuLevel2[j].name+'</a></li>'));
-                            }
-                            $li.append($ol);
-                            $("#menu").append($li);
-                        }
-                    }else {
+                        handler(data.data);
+                    } else {
                         alert(data.message);
                     }
                 },
-                error: function(XHR) {
+                error: function (XHR) {
                     alert(XHR.status);
                 }
             });
-
-            //注销
-            $("#logoutBtn").click(function() {
-                $.ajax({
-                    type: "GET",
-                    url: "/sbl2/user/logout",
-                    data: {},
-                    dataType: "JSON",
-                    success: function(data) {
-                        if (data.success) {
-                            window.location.href = data.data;
-                        }else {
-                            alert(data.message);
-                        }
-                    },
-                    error: function(XHR) {
-                        alert(XHR.status);
-                    }
+        }
+    };
+</script>
+<script type="text/javascript" charset="utf-8">
+    //封装秒杀相关请求
+    var SECKILL = {
+        URL: {
+            getListURL: function () {
+                return "/sbl2/seckill/list";
+            },
+            getDetailURL: function (id) {
+                return "/sbl2/seckill/" + id + "/detail";
+            },
+            getTimeURL: function () {
+                return "/sbl2/seckill/time";
+            },
+            getSeckillMD5URL: function(id) {
+                return "/sbl2/seckill/" + id + "/md5";
+            },
+            seckillURL: function(id, md5) {
+                return "/sbl2/seckill/" + id + "/" + md5 + "/seckill";
+            }
+        },
+        getList: function () {
+            //获取秒杀列表
+            AJAX.request("GET", SECKILL.URL.getListURL(), {}, function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    $tr = $('<tr>' +
+                        '<th>' + (i + 1) + '</td>' +
+                        '<td>' + result[i].name + '</td>' +
+                        '<td>' + result[i].number + '</td>' +
+                        '<td>' + result[i].startTime + '</td>' +
+                        '<td>' + result[i].endTime + '</td>' +
+                        '</tr>');
+                    $td = $('<td></td>');
+                    $td.append($('<input type="button" value="秒杀" sid="' + result[i].id + '" />').click(function () {
+                        SECKILL.getDetail($(this).attr("sid"));
+                    }));
+                    $tr.append($td);
+                    $("#seckills").append($tr);
+                }
+            });
+        },
+        getDetail: function (id) {
+            //获取秒杀详细
+            AJAX.request("GET", SECKILL.URL.getDetailURL(id), {}, function (result) {
+                //清空
+                $("#seckill").html("");
+                //显示
+                $("#seckill").append($('<h1 sid="' + id + '">' + result.name + '</h1>'));
+                //加载秒杀详情
+                SECKILL.getTime(result.startTime, result.endTime);
+            });
+        },
+        getTime: function (startTime, endTime) {
+            //获取系统时间，以确定秒杀详情展示
+            AJAX.request("GET", SECKILL.URL.getTimeURL(), {}, function (result) {
+                var nowTime = new Date(result);
+                //判断
+                if (nowTime > new Date(endTime)) {
+                    //秒杀结束
+                    $("#seckill").append($('<p style="color: red;">秒杀已结束！</p>'));
+                } else if (nowTime < new Date(startTime)) {
+                    //秒杀未开启
+                    $("#seckill").append($('<p style="color: green;"></p>').countdown(new Date(startTime), function (event) {
+                        //添加倒计时效果
+                        //控制格式
+                        var format = event.strftime("秒杀倒计时：%D天 %H时 %M分 %S秒");
+                        $(this).html(format);
+                    }).on("finish.countdown", function() {
+                        //倒计时结束出现秒杀按钮
+                        SECKILL.seckillStarted();
+                    }));
+                } else {
+                    //秒杀已开启
+                    SECKILL.seckillStarted();
+                }
+            });
+        },
+        seckillStarted: function() {
+            //秒杀已开始
+            $("#seckill p").remove();
+            //绑定一次点击事件
+            $("#seckill").append($('<input type="button" value="秒杀" />').one("click", function() {
+                //禁用按钮
+                $(this).attr("disabled", true);
+                //获取秒杀md5
+                var id = $(this).prev().attr("sid");
+                AJAX.request("POST", SECKILL.URL.getSeckillMD5URL(id), {}, function (result) {
+                    //执行秒杀
+                    SECKILL.seckill(id, result);
                 });
+            }));
+        },
+        seckill: function(id, md5) {
+            //执行秒杀
+            AJAX.request("POST", SECKILL.URL.seckillURL(id, md5), {}, function (result) {
+                alert (result);
+            });
+        }
+    }
+</script>
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+
+        //获取菜单
+        AJAX.request("GET", "/sbl2/user/getMenu", {}, function (result) {
+            for (var i = 0; i < result.length; i++) {
+                $li = $('<li>' + result[i].name + '</li>')
+                $ol = $('<ol></ol>');
+                for (var j = 0; j < result[i].menuLevel2.length; j++) {
+                    $ol.append($('<li><a href="' + result[i].menuLevel2[j].url + '">' + result[i].menuLevel2[j].name + '</a></li>'));
+                }
+                $li.append($ol);
+                $("#menu").append($li);
+            }
+        });
+
+        //注销
+        $("#logoutBtn").click(function () {
+            AJAX.request("GET", "/sbl2/user/logout", {}, function (result) {
+                window.location.href = result;
             });
         });
-    </script>
+
+        //获取秒杀列表
+        SECKILL.getList();
+    });
+</script>
 </body>
 </html>

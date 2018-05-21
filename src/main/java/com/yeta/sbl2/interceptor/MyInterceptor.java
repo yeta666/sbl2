@@ -28,7 +28,8 @@ public class MyInterceptor implements HandlerInterceptor {
             "/login",
             "/user/login",
             "/js/jquery-2.1.0.js",
-            "/js/jquery.cookie.js"
+            "/js/jquery.cookie.js",
+            "/js/jquery.countdown.min.js"
     };
 
     /**
@@ -72,13 +73,13 @@ public class MyInterceptor implements HandlerInterceptor {
                 } else {
                     //重定向到登陆页面
                     LOGGER.info("请求访问：" + uri + "，未登录，拦截！");
-                    response.sendRedirect(contextPath + "login");
+                    response.sendRedirect(contextPath + "/login");
                     return false;
                 }
             } else {
                 //重定向到登陆页面
                 LOGGER.info("请求访问：" + uri + "，未登录，拦截！");
-                response.sendRedirect(contextPath + "login");
+                response.sendRedirect(contextPath + "/login");
                 return false;
             }
         }

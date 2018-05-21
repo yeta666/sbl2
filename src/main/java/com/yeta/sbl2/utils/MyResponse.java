@@ -1,5 +1,6 @@
 package com.yeta.sbl2.utils;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -17,6 +18,7 @@ public class MyResponse {
      * 数据
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Object data;
 
     /**

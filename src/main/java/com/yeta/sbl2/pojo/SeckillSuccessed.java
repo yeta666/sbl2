@@ -1,9 +1,11 @@
 package com.yeta.sbl2.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author YETA
@@ -27,7 +29,8 @@ public class SeckillSuccessed {
     private Integer state;
 
     @Column(name = "createTime")
-    private Timestamp createTime;
+    @JsonIgnore
+    private Date createTime;
 
     Seckill seckill;
 
@@ -66,11 +69,11 @@ public class SeckillSuccessed {
         this.state = state;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

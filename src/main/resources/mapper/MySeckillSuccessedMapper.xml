@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yeta.sbl2.mapper.MySeckillSuccessedMapper" >
 
-    <select id="findSeckillSuccessedBySeckillIdAndUsername" resultType="com.yeta.sbl2.pojo.SeckillSuccessed">
+    <select id="findBySeckillIdAndUsername" resultType="com.yeta.sbl2.pojo.SeckillSuccessed">
         SELECT
           ss.seckillId, ss.username, ss.name, ss.state, ss.createTime,
           s.id "seckill.id", s.name "seckill.name", s.number "seckill.number", s.startTime "seckill.startTime", s.endTime "seckill.endTime", s.createTime "seckill.createTime"

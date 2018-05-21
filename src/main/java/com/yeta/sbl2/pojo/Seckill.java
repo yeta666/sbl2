@@ -1,10 +1,12 @@
 package com.yeta.sbl2.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author YETA
@@ -24,12 +26,15 @@ public class Seckill {
     private Integer number;
 
     @Column(name = "startTime")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
     @Column(name = "endTime")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
 
     @Column(name = "createTime")
+    @JsonIgnore
     private Date createTime;
 
     public Seckill() {

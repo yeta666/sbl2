@@ -5,7 +5,7 @@ import com.yeta.sbl2.utils.MyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * 秒杀相关接口定义
@@ -23,8 +23,8 @@ public class SeckillController {
      * 获取所有秒杀信息接口
      * @return
      */
-    @GetMapping(value = "/findAllSeckill")
-    public MyResponse findAllSeckill() {
+    @GetMapping(value = "/list")
+    public MyResponse list() {
         return seckillService.findAllSeckill();
     }
 
@@ -33,8 +33,8 @@ public class SeckillController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/findSeckillById")
-    public MyResponse findSeckillById(@RequestParam(value = "id", required = true) Integer id) {
+    @GetMapping(value = "/{id}/detail")
+    public MyResponse detail(@PathVariable("id") Integer id) {
         return seckillService.findSeckillById(id);
     }
 
@@ -43,8 +43,8 @@ public class SeckillController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/getSeckillUrl")
-    public MyResponse getSeckillUrl(@RequestParam(value = "id", required = true) Integer id) {
+    @PostMapping(value = "/{id}/md5")
+    public MyResponse md5(@PathVariable("id") Integer id) {
         return seckillService.getSeckillUrl(id);
     }
 
@@ -52,13 +52,22 @@ public class SeckillController {
      * 秒杀接口
      * @param id
      * @param md5
-     * @param request
+     * @param sbl2Login
      * @return
      */
-    @GetMapping(value = "/seckill")
-    public MyResponse seckill(@RequestParam(value = "id", required = true) Integer id,
-                              @RequestParam(value = "md5", required = true) String md5,
-                              HttpServletRequest request) {
-        return seckillService.seckill(id, md5, request);
+    @PostMapping(value = "/{id}/{md5}/seckill")
+    public MyResponse seckill(@PathVariable("id") Integer id,
+                              @PathVariable("md5") String md5,
+                              @CookieValue(value = "sbl2Login", required = true) String sbl2Login) {
+        return seckillService.seckill(id, md5, sbl2Login);
+    }
+
+    /**
+     * 获取系统时间接口
+     * @return
+     */
+    @GetMapping(value = "/time")
+    public MyResponse time() {
+        return new MyResponse(new Date());
     }
 }

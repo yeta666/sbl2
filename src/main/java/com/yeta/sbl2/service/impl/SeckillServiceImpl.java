@@ -14,11 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -95,12 +90,12 @@ public class SeckillServiceImpl implements SeckillService {
             throw new SeckillCloseException(SECKILL_CLOSE);
         }
 
-        return new MyResponse(id + "/" + MD5Util.getMd5(id.toString()));
+        return new MyResponse(MD5Util.getMd5(id.toString()));
     }
 
     @Override
     @Transactional      //开启事务
-    public MyResponse seckill(Integer id, String md5, HttpServletRequest request) {
+    public MyResponse seckill(Integer id, String md5, String sbl2Login) {
 
         if (md5 == null || !md5.equals(MD5Util.getMd5(id.toString()))) {
             throw new SeckillException(SECKILL_MD5_ERROR);
@@ -121,24 +116,16 @@ public class SeckillServiceImpl implements SeckillService {
             throw new SeckillCloseException(SECKILL_CLOSE);
         }
 
-        //从cookie中获取用户名和用户姓名
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if ("sbl2Login".equals(cookie.getName())) {
-                //插入秒杀成功信息
-                SeckillSuccessed seckillSuccessed = new SeckillSuccessed();
-                seckillSuccessed.setSeckillId(id);
-                seckillSuccessed.setUsername(cookie.getValue().split("#")[2]);
-                seckillSuccessed.setName(cookie.getValue().split("#")[3]);
-                seckillSuccessed.setState(0);
-                int insertResult = mySeckillSuccessedMapper.insertSeckillSuccessed(seckillSuccessed);
+        //插入秒杀成功信息
+        SeckillSuccessed seckillSuccessed = new SeckillSuccessed();
+        seckillSuccessed.setSeckillId(id);
+        seckillSuccessed.setUsername(sbl2Login.split("#")[2]);
+        seckillSuccessed.setName(sbl2Login.split("#")[3]);
+        seckillSuccessed.setState(0);
+        int insertResult = mySeckillSuccessedMapper.insertSeckillSuccessed(seckillSuccessed);
 
-                if (insertResult < 1) {
-                    throw new SeckillRepeatException(SECKILL_REPEAT);       //回滚
-                }
-
-                break;
-            }
+        if (insertResult < 1) {
+            throw new SeckillRepeatException(SECKILL_REPEAT);       //回滚
         }
 
         return new MyResponse(SECKILL_SUCCESS);

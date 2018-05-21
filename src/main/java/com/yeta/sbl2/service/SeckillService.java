@@ -34,9 +34,9 @@ public interface SeckillService {
      * 秒杀
      * @param id
      * @param url
-     * @param request
+     * @param sbl2Login
      * @return
      */
-    MyResponse seckill(Integer id, String url, HttpServletRequest request);
+    MyResponse seckill(Integer id, String url, String sbl2Login);
 
 }

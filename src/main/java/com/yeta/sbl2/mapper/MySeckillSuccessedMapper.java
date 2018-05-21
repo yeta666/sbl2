@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MySeckillSuccessedMapper {
 
-    List<SeckillSuccessed> findSeckillSuccessedBySeckillIdAndUsername(@Param("seckillId") Integer seckillId, @Param("username") String username);
+    SeckillSuccessed findBySeckillIdAndUsername(@Param("seckillId") Integer seckillId, @Param("username") String username);
 
     int insertSeckillSuccessed(SeckillSuccessed seckillSuccessed);
 }

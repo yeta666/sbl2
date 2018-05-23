@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50544
 File Encoding         : 65001
 
-Date: 2018-05-17 21:57:27
+Date: 2018-05-21 22:38:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -101,9 +101,9 @@ CREATE TABLE `seckill` (
 -- ----------------------------
 -- Records of seckill
 -- ----------------------------
-INSERT INTO `seckill` VALUES ('1', '1元秒杀iphoneX', '6', '2018-05-17 15:51:02', '2018-05-18 15:51:07', '2018-05-17 18:59:31');
-INSERT INTO `seckill` VALUES ('2', '2元秒杀iphone8', '20', '2018-05-17 15:51:57', '2018-05-18 15:52:00', '2018-05-17 17:16:55');
-INSERT INTO `seckill` VALUES ('3', '3元秒杀iphone7', '30', '2018-05-17 15:52:26', '2018-05-18 15:52:29', '2018-05-17 17:16:56');
+INSERT INTO `seckill` VALUES ('1', '1元秒杀iphoneX', '0', '2018-05-20 02:00:00', '2018-05-21 15:51:07', '2018-05-21 21:26:32');
+INSERT INTO `seckill` VALUES ('2', '2元秒杀iphone8', '16', '2018-05-21 22:13:57', '2018-06-01 15:52:00', '2018-05-21 22:35:09');
+INSERT INTO `seckill` VALUES ('3', '3元秒杀iphone7', '30', '2018-05-23 15:52:26', '2018-05-23 15:52:29', '2018-05-21 20:38:29');
 
 -- ----------------------------
 -- Table structure for seckill_successed
@@ -121,9 +121,7 @@ CREATE TABLE `seckill_successed` (
 -- ----------------------------
 -- Records of seckill_successed
 -- ----------------------------
-INSERT INTO `seckill_successed` VALUES ('1', 'yeta1', 'yeta1', '1', '2018-05-17 19:29:25');
-INSERT INTO `seckill_successed` VALUES ('1', 'yeta2', 'yeta2', '1', '2018-05-17 19:37:53');
-INSERT INTO `seckill_successed` VALUES ('2', 'yeta2', 'yeta2', '1', '2018-05-17 19:31:32');
+INSERT INTO `seckill_successed` VALUES ('2', 'admin', 'admin', '0', '2018-05-21 22:35:09');
 
 -- ----------------------------
 -- Table structure for user

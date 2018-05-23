@@ -65,6 +65,52 @@ request.getHeader("X-Requested-With") != null && "XMLHttpRequest".equals(request
 </dependency>
 2. 下载安装redis和redis desktop manager，redis-server.exe redis.windows.conf命令启动redis服务
 3. 封装redis常用操作类
+4. 存在一个序列化问题，使用protostuff极大提升效率
+    <dependency>
+        <groupId>com.dyuproject.protostuff</groupId>
+        <artifactId>protostuff-core</artifactId>
+        <version>1.0.8</version>
+    </dependency>
+    <dependency>
+        <groupId>com.dyuproject.protostuff</groupId>
+        <artifactId>protostuff-runtime</artifactId>
+        <version>1.0.8</version>
+    </dependency>
+
+    使用说明：
+    private RuntimeSchema<Model> schema = RuntimeSchema.createFrom(Model.class);
+    private final JedisPool jedisPool = new JedisPool(ip, port);
+
+    //get
+    try {
+        Jedis jedis = jedisPool.getResource();
+        try {
+            byte[] bytes = jedis.get(key.getBytes());
+            if (bytes != null) {
+                Model model = schema.newMessage();
+                ProtostuffIOUtil.mergeFrom(bytes, model, schema);
+                return model;
+            }
+        } finally {
+            jedis.close();
+        }
+    } catch (Exception e) {
+        //
+    }
+
+    //set
+    try {
+        Jedis jedis = jedisPool.getResource();
+        try {
+            byte[] bytes = ProtostuffIOUtil.toByteArray(model, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
+            int timeout = 60 * 60;      //1小时
+            String result = jedis.setex(key.getBytes(), timeout, bytes);
+        } finally {
+            jedis.close();
+        }
+    } catch (Exception e) {
+        //
+    }
 
 #####整合定时任务
 1. 注解：@EnableScheduling开启定时任务、@Scheduled设置定时任务、@Component等作为组件被扫描

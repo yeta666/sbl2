@@ -7,19 +7,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * AOP
- * Created by YETA666 on 2018/4/24 0024.
+ * Aspect类
+ * Aspect可以拿到原始的HTTP请求和响应的信息，也可以拿到方法的信息，还可以拿到参数
+ * Created by YETA666 on 2018/4/22 0022.
  */
 @Aspect
 @Component
 public class MyAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyAspect.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyAspect.class);
 
     @Pointcut("execution(public * com.yeta.sbl2.controller.*.*(..))")
     public void log() {
@@ -28,14 +28,16 @@ public class MyAspect {
 
     @Before("log()")
     public void doBefore(JoinPoint joinPoint) {
-        logger.info("doBefore......");
+
+        LOGGER.info("Aspect doBefore...");
+
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
-        logger.info("url={}", request.getRequestURL());
-        logger.info("method={}", request.getMethod());
-        logger.info("ip={}", request.getRemoteAddr());
-        logger.info("classMethod={}", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        logger.info("args={}", joinPoint.getArgs());
+        LOGGER.info("url={}", request.getRequestURL());
+        LOGGER.info("method={}", request.getMethod());
+        LOGGER.info("ip={}", request.getRemoteAddr());
+        LOGGER.info("classMethod={}", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+        LOGGER.info("args={}", joinPoint.getArgs());
         HttpServletResponse response = requestAttributes.getResponse();
         //设置哪url可以跨域请求到本域
         //response.setHeader("Access-Control-Allow-Origin", "*");
@@ -43,13 +45,16 @@ public class MyAspect {
 
     @After("log()")
     public void doAfter() {
-        logger.info("doAfter......");
+        LOGGER.info("Aspect doAfter...");
     }
 
     @AfterReturning(returning = "object", pointcut = "log()")
     public void doAfterReturning(Object object) {
+
+        LOGGER.info("Aspect doAfterReturning...");
+
         if (object != null) {
-            logger.info("response={}", "\n" + object.toString());
+            LOGGER.info("response={}", object.toString());
         }
     }
 

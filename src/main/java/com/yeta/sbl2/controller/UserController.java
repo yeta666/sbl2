@@ -88,4 +88,9 @@ public class UserController {
     public MyResponse getMenu(HttpServletRequest request, HttpServletResponse response) {
         return userService.getMenu(request, response);
     }
+
+    @GetMapping(value = "/onlines")
+    public MyResponse onlines(HttpServletRequest request, HttpServletResponse response) {
+        return userService.onlines(request, response);
+    }
 }

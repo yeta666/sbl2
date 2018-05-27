@@ -38,6 +38,9 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 //配置bean时需要加入这个注解
 @Configuration
+
+//扫描配置的过滤器和拦截器，因为这两个是基于Servlet的
+@ServletComponentScan
 public class Sbl2Application {
 
 	public static void main(String[] args) {
@@ -84,7 +87,7 @@ public class Sbl2Application {
 
 	/**
 	 * 这种方式用于配置第三方过滤器
-	 * 配置自定义过滤器只需加上@Component和@WebFilter注解
+	 * 配置自定义过滤器只需加上@WebFilter注解
 	 * @return
 	 */
 	/*@Bean

@@ -38,29 +38,8 @@
 <!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
 <script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
 <script src="/sbl2/js/jquery.countdown.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" charset="utf-8">
-    //封装AJAX请求
-    var AJAX = {
-        request: function (type, url, data, handler) {
-            $.ajax({
-                type: type,
-                url: url,
-                data: data,
-                dataType: "JSON",
-                success: function (data) {
-                    if (data.success) {
-                        handler(data.data);
-                    } else {
-                        alert(data.message);
-                    }
-                },
-                error: function (XHR) {
-                    alert(XHR.status);
-                }
-            });
-        }
-    };
-</script>
+<script src="/sbl2/js/yeta.ajax.js" type="text/javascript" charset="utf-8"></script>
+
 <script type="text/javascript" charset="utf-8">
     //封装秒杀相关请求
     var SECKILL = {

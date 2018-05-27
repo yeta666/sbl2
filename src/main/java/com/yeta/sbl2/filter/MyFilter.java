@@ -2,11 +2,14 @@ package com.yeta.sbl2.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 过滤器类
@@ -14,7 +17,6 @@ import java.io.IOException;
  * @author YETA
  * @date 2018/05/24/20:25
  */
-@Component      //这种方式用于配置自定义过滤器
 @WebFilter(filterName = "MyFilter", urlPatterns = "/*")       //注解方式配置
 public class MyFilter implements Filter {
 
@@ -28,6 +30,11 @@ public class MyFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         LOGGER.info("过滤器doFilter前...");
+
+        //获取当前Session对象
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpSession session = request.getSession();
+
         filterChain.doFilter(servletRequest, servletResponse);
         LOGGER.info("过滤器doFilter后...");
     }

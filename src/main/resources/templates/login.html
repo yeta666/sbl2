@@ -12,32 +12,37 @@
     <input type="button" id="loginBtn" value="登陆"/>
 </form>
 
+<br />
+
+<p id="onlines"></p>
+
 <!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
 <script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="/sbl2/js/yeta.ajax.js" type="text/javascript" charset="utf-8"></script>
+
+
 <script type="text/javascript" charset="utf-8">
     $(function () {
-        $("#loginBtn").click(function () {
-            //请求登陆
-            $.ajax({
-                type: "POST",
-                url: "/sbl2/user/login",
-                data: {
-                    "username": $("#username").val().trim(),
-                    "password": $("#password").val().trim()
-                },
-                dataType: "JSON",
-                success: function (data) {
-                    if (data.success) {
-                        console.log(data.data);
-                        window.location.href = data.data;
-                    } else {
-                        alert(data.message);
-                    }
-                },
-                error: function (XHR) {
-                    alert(XHR.status);
+
+        //页面加载获取在线人数
+        AJAX.request("GET", "/sbl2/user/onlines", {}, function(result) {
+                console.log(result);
+                $("#onlines").html("当前在线人数：" + result.length);
+                for (var i = 0; i < result.length; i++) {
+                    $("#onlines").append($('<p>' + result[i].id + '</p>'));
                 }
             });
+
+        $("#loginBtn").click(function () {
+            //请求登陆
+            AJAX.request("POST",
+                "/sbl2/user/login",
+                {
+                    "username": $("#username").val().trim(),
+                    "password": $("#password").val().trim()
+                }, function(result) {
+                    window.location.href = result;
+                });
         });
     });
 </script>

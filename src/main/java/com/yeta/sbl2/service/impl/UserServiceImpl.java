@@ -24,9 +24,11 @@ import org.thymeleaf.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.mail.MessagingException;
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -266,7 +268,7 @@ public class UserServiceImpl implements UserService {
 
         if (user != null && user.getPassword() != null && password.equals(user.getPassword())) {
             //用户名存在且密码正确
-            //写cookie
+            //写用户登陆状态的cookie
             String cookieValue = "true#" + user.getId().toString() + "#" + user.getUsername() + "#" + user.getName();
             Cookie cookie = new Cookie("sbl2Login", cookieValue);
             cookie.setPath("/");
@@ -385,5 +387,22 @@ public class UserServiceImpl implements UserService {
             myResponse.setData(menu);
         }
         return  myResponse;
+    }
+
+    @Override
+    public MyResponse onlines(HttpServletRequest request, HttpServletResponse response) {
+
+        //从ServletCContext中获取Session对象
+        ServletContext servletContext = request.getSession().getServletContext();
+        List<HttpSession> sessionList = (List<HttpSession>) servletContext.getAttribute("onlines");
+
+        List<Map<String, String>> sessions = new ArrayList<>();
+        for (HttpSession httpSession: sessionList) {
+            Map<String, String> sess = new HashMap<>();
+            sess.put("id", httpSession.getId());
+            sessions.add(sess);
+        }
+
+        return new MyResponse(sessions);
     }
 }

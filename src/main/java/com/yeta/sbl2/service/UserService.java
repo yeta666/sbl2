@@ -36,4 +36,6 @@ public interface UserService {
     MyResponse logout(HttpServletRequest request, HttpServletResponse response);
 
     MyResponse getMenu(HttpServletRequest request, HttpServletResponse response);
+
+    MyResponse onlines(HttpServletRequest request, HttpServletResponse response);
 }

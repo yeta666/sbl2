@@ -271,7 +271,10 @@ public class UserServiceImpl implements UserService {
             //写用户登陆状态的cookie
             String cookieValue = "true#" + user.getId().toString() + "#" + user.getUsername() + "#" + user.getName();
             Cookie cookie = new Cookie("sbl2Login", cookieValue);
-            cookie.setPath("/");
+            //cookie.setMaxAge(0);      //不记录cookie
+            //cookie.setMaxAge(-1);      //会话级cookie，关闭浏览器失效
+            cookie.setMaxAge(60 * 30);      //过期时间为60 * 30秒
+            cookie.setPath(contextPath);
             response.addCookie(cookie);
 
             //设置返回结果

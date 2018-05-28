@@ -26,7 +26,6 @@
 
         //页面加载获取在线人数
         AJAX.request("GET", "/sbl2/user/onlines", {}, function(result) {
-                console.log(result);
                 $("#onlines").html("当前在线人数：" + result.length);
                 for (var i = 0; i < result.length; i++) {
                     $("#onlines").append($('<p>' + result[i].id + '</p>'));

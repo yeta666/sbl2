@@ -1,131 +1,163 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
-    <style type="text/css">
-
-    </style>
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
 </head>
+
 <body>
 
-<input type="button" id="logoutBtn" value="注销"/>
+<div class="container">
+    <div>
+        <button class="btn btn-danger" id="logoutBtn">注销</button>
+    </div>
 
-<br/>
+    <br/>
 
-<ul id="menu"></ul>
+    <h1 style="text-align: center;">权限管理</h1>
+    <ul id="menu"></ul>
 
-<br/>
+    <br/>
 
-<table>
-    <thead>
-    <tr>
-        <th>序号</th>
-        <th>描述</th>
-        <th>剩余</th>
-        <th>开始时间</th>
-        <th>结束时间</th>
-        <th>操作</th>
-    </tr>
-    </thead>
-    <tbody id="seckills"></tbody>
-</table>
+    <h1 style="text-align: center;">秒杀业务</h1>
+    <table class="table table-responsive text-center">
+        <caption class="text-center">秒杀列表</caption>
+        <thead>
+        <tr>
+            <th class="text-center">序号</th>
+            <th class="text-center">描述</th>
+            <th class="text-center">剩余</th>
+            <th class="text-center">开始时间</th>
+            <th class="text-center">结束时间</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody id="seckills"></tbody>
+    </table>
+    <div id="seckill"></div>
 
-<br/>
+    <br />
 
-<div id="seckill"></div>
+    <h1 style="text-align: center;">文件上传下载</h1>
+    <table class="table table-responsive text-center">
+        <caption class="text-center">文件列表</caption>
+        <thead>
+        <tr>
+            <th class="text-center">序号</th>
+            <th class="text-center">文件名</th>
+            <th class="text-center" colspan="2">操作</th>
+        </tr>
+        </thead>
+        <tbody id="files"></tbody>
+    </table>
+    <div>
+        <form class="form col-sm-4" id="uploadForm" enctype="multipart/form-data">
+            <input class="btn btn-success" type="file" name="file" />
+        </form>
+        <div class="col-sm-2">
+            <button id="uploadBtn" class="btn btn-success">上传</button>
+        </div>
+        <div class="col-sm-6">
+            <div class="progress" id="uploadProgress"></div>
+        </div>
+    </div>
 
-<!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
-<script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
-<script src="/sbl2/js/jquery.countdown.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="/sbl2/js/yeta.ajax.js" type="text/javascript" charset="utf-8"></script>
+    <br />
+</div>
+
+<script src="js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/jquery.countdown.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/yeta.ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript" charset="utf-8">
     //封装秒杀相关请求
     var SECKILL = {
-        URL: {
-            getListURL: function () {
+        urls: {
+            listUrl: function() {
                 return "/sbl2/seckill/list";
             },
-            getDetailURL: function (id) {
+            detailUrl: function(id) {
                 return "/sbl2/seckill/" + id + "/detail";
             },
-            getTimeURL: function () {
+            timeUrl: function() {
                 return "/sbl2/seckill/time";
             },
-            getSeckillMD5URL: function(id) {
+            md5Url: function(id) {
                 return "/sbl2/seckill/" + id + "/md5";
             },
-            seckillURL: function(id, md5) {
+            seckillUrl: function(id, md5) {
                 return "/sbl2/seckill/" + id + "/" + md5 + "/seckill";
             }
         },
-        getList: function () {
+        list: function() {
             //获取秒杀列表
-            AJAX.request("GET", SECKILL.URL.getListURL(), {}, function (result) {
-                for (var i = 0; i < result.length; i++) {
+            AJAX.request("GET", SECKILL.urls.listUrl(), {}, function(result) {
+                for(var i = 0; i < result.length; i++) {
                     $tr = $('<tr>' +
-                        '<th>' + (i + 1) + '</td>' +
+                        '<td>' + (i + 1) + '</td>' +
                         '<td>' + result[i].name + '</td>' +
                         '<td>' + result[i].number + '</td>' +
                         '<td>' + result[i].startTime + '</td>' +
                         '<td>' + result[i].endTime + '</td>' +
                         '</tr>');
                     $td = $('<td></td>');
-                    $td.append($('<input type="button" value="秒杀" sid="' + result[i].id + '" />').click(function () {
-                        SECKILL.getDetail($(this).attr("sid"));
+                    $td.append($('<button class="btn btn-warning" sid="' + result[i].id + '">秒杀</button>').click(function() {
+                        SECKILL.detail($(this).attr("sid"));
                     }));
                     $tr.append($td);
                     $("#seckills").append($tr);
                 }
             });
         },
-        getDetail: function (id) {
+        detail: function(id) {
             //获取秒杀详细
-            AJAX.request("GET", SECKILL.URL.getDetailURL(id), {}, function (result) {
+            AJAX.request("GET", SECKILL.urls.detailUrl(id), {}, function(result) {
                 //清空
                 $("#seckill").html("");
                 //显示
-                $("#seckill").append($('<h1 sid="' + id + '">' + result.name + '</h1>'));
+                $("#seckill").append($('<h3 sid="' + id + '">' + result.name + '</h3>'));
                 //加载秒杀详情
-                SECKILL.getTime(result.startTime, result.endTime);
+                SECKILL.time(result.startTime, result.endTime);
             });
         },
-        getTime: function (startTime, endTime) {
+        time: function(startTime, endTime) {
             //获取系统时间，以确定秒杀详情展示
-            AJAX.request("GET", SECKILL.URL.getTimeURL(), {}, function (result) {
+            AJAX.request("GET", SECKILL.urls.timeUrl(), {}, function(result) {
                 var nowTime = new Date(result);
                 //判断
-                if (nowTime > new Date(endTime)) {
+                if(nowTime > new Date(endTime)) {
                     //秒杀结束
                     $("#seckill").append($('<p style="color: red;">秒杀已结束！</p>'));
-                } else if (nowTime < new Date(startTime)) {
+                } else if(nowTime < new Date(startTime)) {
                     //秒杀未开启
-                    $("#seckill").append($('<p style="color: green;"></p>').countdown(new Date(startTime), function (event) {
+                    $("#seckill").append($('<p style="color: green;"></p>').countdown(new Date(startTime), function(event) {
                         //添加倒计时效果
                         //控制格式
                         var format = event.strftime("秒杀倒计时：%D天 %H时 %M分 %S秒");
                         $(this).html(format);
                     }).on("finish.countdown", function() {
                         //倒计时结束出现秒杀按钮
-                        SECKILL.seckillStarted();
+                        SECKILL.md5();
                     }));
                 } else {
                     //秒杀已开启
-                    SECKILL.seckillStarted();
+                    SECKILL.md5();
                 }
             });
         },
-        seckillStarted: function() {
+        md5: function() {
             //秒杀已开始
             $("#seckill p").remove();
             //绑定一次点击事件
-            $("#seckill").append($('<input type="button" value="秒杀" />').one("click", function() {
+            $("#seckill").append($('<button class="btn btn-success">秒杀</button>').one("click", function() {
                 //禁用按钮
                 $(this).attr("disabled", true);
                 //获取秒杀md5
                 var id = $(this).prev().attr("sid");
-                AJAX.request("POST", SECKILL.URL.getSeckillMD5URL(id), {}, function (result) {
+                AJAX.request("POST", SECKILL.urls.md5Url(id), {}, function(result) {
                     //执行秒杀
                     SECKILL.seckill(id, result);
                 });
@@ -133,38 +165,140 @@
         },
         seckill: function(id, md5) {
             //执行秒杀
-            AJAX.request("POST", SECKILL.URL.seckillURL(id, md5), {}, function (result) {
-                alert (result);
+            AJAX.request("POST", SECKILL.urls.seckillUrl(id, md5), {}, function(result) {
+                alert(result);
             });
         }
     }
 </script>
+
+<script type="text/javascript">
+    //封装文件上传下载相关请求
+    var FILE = {
+        urls: {
+            listUrl: function() {
+                return "/sbl2/file/list";
+            },
+            uploadUrl: function() {
+                return "/sbl2/file/upload";
+            },
+            downloadUrl: function() {
+                return "/sbl2/file/download";
+            },
+            deleteUrl: function() {
+                return "/sbl2/file/delete";
+            }
+        },
+        list: function() {
+            //清空文件列表
+            $("#files").html("");
+            //请求文件列表
+            AJAX.request("GET", FILE.urls.listUrl(), {}, function(result) {
+                //加载到表格中
+                for(var i = 0; i < result.length; i++) {
+                    $tr = $('<tr><td>' + (i + 1) + '</td><td>' + result[i] + '</td></tr>');
+                    $td = $('<td><a class="btn btn-info" href="' + FILE.urls.downloadUrl() + "?fileName=" + result[i] + '">下载</a></td>');
+                    $td.append($('<button style="margin-left: 10px;" class="btn btn-danger" fileName="' + result[i] + '">删除</button>').click(function() {
+                        FILE.delete($(this).attr("fileName"));
+                    }));
+                    $tr.append($td);
+                    $("#files").append($tr);
+                }
+            });
+        },
+        upload: function() {
+            //设置进度条
+            FILE.progress(0);
+            //使用FormData对象来封装上传文件
+            var file = new FormData($("#uploadForm")[0]);
+            //发送请求，需要设置processData和contentType
+            $.ajax({
+                url: FILE.urls.uploadUrl(),
+                type: "POST",
+                data: file,
+                dataType: "JSON",
+                //不处理发送的数据
+                processData: false,
+                //自动加上正确的Content-Type
+                contentType: false,
+                //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数
+                xhr: function() {
+                    $xhr = $.ajaxSettings.xhr();
+                    //判断upload属性是否存在
+                    if($xhr.upload) {
+                        //绑定progress事件的回调函数
+                        $xhr.upload.addEventListener('progress', function(e) {
+                            FILE.progress(e.loaded / e.total * 100);
+                        }, false);
+                    }
+                    //返回xhr对象给jQuery使用
+                    return $xhr;
+                },
+                success: function(data) {
+                    if(data.success) {
+                        //设置进度条
+                        FILE.progress(100);
+                        //重新获取文件列表
+                        FILE.list();
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function(XHR) {
+                    alert(XHR.status);
+                }
+            });
+        },
+        delete: function(fileName) {
+            //发送删除文件请求
+            AJAX.request("POST", FILE.urls.deleteUrl(), { "fileName": fileName }, function(result) {
+                //重新获取文件列表
+                FILE.list();
+            });
+        },
+        progress: function(now) {
+            $("#uploadProgress").html('<div class="progress-bar progress-bar-success progress-bar-striped active" ' +
+                'role="progressbar" aria-valuenow="' + now + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + now + '%">' +
+                '<span class="sr-only">' + now + '% Complete</span></div>');
+        }
+    }
+</script>
+
 <script type="text/javascript" charset="utf-8">
-    $(function () {
+    $(function() {
+
+        //注销
+        $("#logoutBtn").click(function() {
+            AJAX.request("GET", "/sbl2/user/logout", {}, function(result) {
+                window.location.href = result;
+            });
+        });
 
         //获取菜单
-        AJAX.request("GET", "/sbl2/user/getMenu", {}, function (result) {
-            for (var i = 0; i < result.length; i++) {
+        AJAX.request("GET", "/sbl2/user/getMenu", {}, function(result) {
+            for(var i = 0; i < result.length; i++) {
                 $li = $('<li>' + result[i].name + '</li>')
                 $ol = $('<ol></ol>');
-                for (var j = 0; j < result[i].menuLevel2.length; j++) {
-                    $ol.append($('<li><a href="' + result[i].menuLevel2[j].url + '">' + result[i].menuLevel2[j].name + '</a></li>'));
+                for(var j = 0; j < result[i].menuLevel2.length; j++) {
+                    $ol.append($('<li><a href="' + result[i].menuLevel2[j].urls + '">' + result[i].menuLevel2[j].name + '</a></li>'));
                 }
                 $li.append($ol);
                 $("#menu").append($li);
             }
         });
 
-        //注销
-        $("#logoutBtn").click(function () {
-            AJAX.request("GET", "/sbl2/user/logout", {}, function (result) {
-                window.location.href = result;
-            });
-        });
-
         //获取秒杀列表
-        SECKILL.getList();
+        SECKILL.list();
+
+        //获取文件列表
+        FILE.list();
+
+        //上传文件按钮绑定事件
+        $("#uploadBtn").click(function() {
+            FILE.upload();
+        });
     });
 </script>
 </body>
+
 </html>

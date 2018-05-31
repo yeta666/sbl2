@@ -1,49 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>登陆</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/login.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
+
 <body>
+<!-- Top content -->
+<div class="top-content">
+    <div class="inner-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2 text">
+                    <h1>Please <strong>Login</strong></h1>
+                    <div class="description"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3>Login to my site</h3>
+                            <p>Enter your username and password to log on:</p>
+                        </div>
+                        <div class="form-top-right">
+                            <i class="glyphicon glyphicon-check"></i>
+                        </div>
+                    </div>
+                    <div class="form-bottom">
+                        <form role="form" class="login-form">
+                            <div class="form-group">
+                                <label class="sr-only" for="username">Username</label>
+                                <input type="text" name="username" placeholder="Username..." class="form-username form-control" id="username">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="password">Password</label>
+                                <input type="password" name="password" placeholder="Password..." class="form-password form-control" id="password">
+                            </div>
+                            <button type="submit" class="btn">Sign in!</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 social-login">
+                    <h3>...or login with:</h3>
+                    <div class="social-login-buttons">
+                        <a class="btn btn-link-1 btn-link-1-Wechat" href="wechatLogin">
+                            <i class="glyphicon glyphicon-heart-empty"></i> Wechat
+                        </a>
+                        <a class="btn btn-link-1 btn-link-1-QQ" href="#">
+                            <i class="glyphicon glyphicon-heart-empty"></i> QQ
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<form>
-    <span>用户名：</span><input type="text" id="username"/>
-    <span>密码：</span><input type="text" id="password"/>
-    <input type="button" id="loginBtn" value="登陆"/>
-</form>
-
-<br />
-
-<p id="onlines"></p>
-
-<!--<script th:src="@{/js/jquery-2.1.0.js}"></script>-->
-<script src="/sbl2/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
-<script src="/sbl2/js/yeta.ajax.js" type="text/javascript" charset="utf-8"></script>
-
-
-<script type="text/javascript" charset="utf-8">
-    $(function () {
+<!-- Javascript -->
+<script src="js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/yeta.ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/jquery.backstretch.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        /*
+         Fullscreen background
+         */
+        $.backstretch("img/background.jpg");
 
         //页面加载获取在线人数
         AJAX.request("GET", "/sbl2/user/onlines", {}, function(result) {
-                $("#onlines").html("当前在线人数：" + result.length);
-                for (var i = 0; i < result.length; i++) {
-                    $("#onlines").append($('<p>' + result[i].id + '</p>'));
-                }
-            });
+            $(".description").html("当前在线人数：" + result.length);
+            /*for(var i = 0; i < result.length; i++) {
+                $(".description").append($('<p>' + result[i].id + '</p>'));
+            }*/
+        });
 
-        $("#loginBtn").click(function () {
+        /*
+         Form validation
+         */
+        $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function() {
+            $(this).removeClass('input-error');
+        });
+
+        //登陆操作
+        $('.login-form').on('submit', function(e) {
+
+            //阻止默认提交
+            e.preventDefault();
+
+            //获取用户名和密码
+            var $username = $("#username").val().trim();
+            var $password = $("#password").val().trim();
+
+            //判断是否为空
+            if($username == "") {
+                $("#username").addClass('input-error');
+                return;
+            }
+
+            if($password == "") {
+                $("#password").addClass('input-error');
+                return;
+            }
+
             //请求登陆
             AJAX.request("POST",
-                "/sbl2/user/login",
-                {
-                    "username": $("#username").val().trim(),
-                    "password": $("#password").val().trim()
-                }, function(result) {
+                "/sbl2/user/login", {
+                    "username": $username,
+                    "password": $password
+                },
+                function(result) {
                     window.location.href = result;
                 });
         });
+
     });
 </script>
 </body>
+
 </html>

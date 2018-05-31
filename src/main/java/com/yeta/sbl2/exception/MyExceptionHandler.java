@@ -1,6 +1,6 @@
 package com.yeta.sbl2.exception;
 
-import com.yeta.sbl2.utils.MyResponse;
+import com.yeta.sbl2.domain.MyResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

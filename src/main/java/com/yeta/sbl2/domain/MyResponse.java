@@ -1,4 +1,4 @@
-package com.yeta.sbl2.utils;
+package com.yeta.sbl2.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,6 +28,11 @@ public class MyResponse {
     private String message;
 
     public MyResponse() {
+    }
+
+    public MyResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
     }
 
     public MyResponse(Object data) {

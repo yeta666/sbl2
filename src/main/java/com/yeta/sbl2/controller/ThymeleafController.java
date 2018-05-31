@@ -29,4 +29,9 @@ public class ThymeleafController {
     public String login1() {
         return "login";
     }
+
+    @RequestMapping(value = "/file")
+    public String file() {
+        return "file";
+    }
 }

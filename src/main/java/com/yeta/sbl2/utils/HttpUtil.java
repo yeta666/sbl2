@@ -1,5 +1,7 @@
 package com.yeta.sbl2.utils;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -8,8 +10,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
-
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * http请求get方法和post方法
@@ -26,7 +29,13 @@ public class HttpUtil {
         HttpResponse response = client.execute(get);
         HttpEntity entity = response.getEntity();
         if (entity != null) {
-            result = EntityUtils.toString(entity, "UTF-8");
+            Header contentType = entity.getContentType();
+            if ("image/jpeg".equals(contentType.getValue())) {
+                InputStream inputStream = entity.getContent();
+                FileUtils.copyToFile(inputStream, new File("src/main/resources/upload/qrcode.jpeg"));
+            } else {
+                result = EntityUtils.toString(entity, "UTF-8");
+            }
         }
         return result;
     }

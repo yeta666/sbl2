@@ -1,14 +1,14 @@
 package com.yeta.sbl2.service;
 
 import com.yeta.sbl2.pojo.User;
-import com.yeta.sbl2.utils.MyResponse;
+import com.yeta.sbl2.domain.MyResponse;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 用户service
+ * 用户逻辑层
  * Created by YETA666 on 2018/4/20 0020.
  */
 public interface UserService {

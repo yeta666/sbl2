@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,8 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import tk.mybatis.spring.annotation.MapperScan;
+
+import javax.servlet.MultipartConfigElement;
 
 //标识程序启动类
 @SpringBootApplication
@@ -126,5 +129,19 @@ public class Sbl2Application {
 			registry.addInterceptor(myInterceptor).addPathPatterns("/*");
 			super.addInterceptors(registry);
 		}
+	}
+
+	/**
+	 * 配置上传文件大小限制
+	 * @return
+	 */
+	@Bean
+	public MultipartConfigElement multipartConfigElement() {
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+		//单个文件最大（KB/MB）
+		factory.setMaxFileSize("10240MB");
+		//设置总上传数据总大小
+		factory.setMaxRequestSize("102400MB");
+		return factory.createMultipartConfig();
 	}
 }

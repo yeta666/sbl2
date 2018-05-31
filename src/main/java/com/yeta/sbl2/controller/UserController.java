@@ -2,12 +2,11 @@ package com.yeta.sbl2.controller;
 
 import com.yeta.sbl2.pojo.User;
 import com.yeta.sbl2.service.UserService;
-import com.yeta.sbl2.utils.MyResponse;
+import com.yeta.sbl2.domain.MyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

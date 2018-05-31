@@ -1,7 +1,6 @@
 package com.yeta.sbl2.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.yeta.sbl2.exception.SeckillCloseException;
 import com.yeta.sbl2.exception.SeckillException;
@@ -12,7 +11,7 @@ import com.yeta.sbl2.pojo.Seckill;
 import com.yeta.sbl2.pojo.SeckillSuccessed;
 import com.yeta.sbl2.service.SeckillService;
 import com.yeta.sbl2.utils.MD5Util;
-import com.yeta.sbl2.utils.MyResponse;
+import com.yeta.sbl2.domain.MyResponse;
 import com.yeta.sbl2.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

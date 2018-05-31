@@ -1,7 +1,7 @@
 package com.yeta.sbl2.controller;
 
 import com.yeta.sbl2.service.TaskService;
-import com.yeta.sbl2.utils.MyResponse;
+import com.yeta.sbl2.domain.MyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,9 +1,9 @@
 package com.yeta.sbl2.service;
 
-import com.yeta.sbl2.utils.MyResponse;
-import javax.servlet.http.HttpServletRequest;
+import com.yeta.sbl2.domain.MyResponse;
 
 /**
+ * 秒杀逻辑层
  * @author YETA
  * @date 2018/05/17/17:09
  */

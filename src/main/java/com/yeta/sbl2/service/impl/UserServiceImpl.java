@@ -13,7 +13,7 @@ import com.yeta.sbl2.pojo.User;
 import com.yeta.sbl2.pojo.UserRole;
 import com.yeta.sbl2.service.UserService;
 import com.yeta.sbl2.utils.MailUtil;
-import com.yeta.sbl2.utils.MyResponse;
+import com.yeta.sbl2.domain.MyResponse;
 import com.yeta.sbl2.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -367,7 +367,7 @@ public class UserServiceImpl implements UserService {
                 Map<String, Object> menuLevel1 = new HashMap<>();
                 menuLevel1.put("id", function.getId());
                 menuLevel1.put("name", function.getName());
-                menuLevel1.put("url", function.getUrl());
+                menuLevel1.put("urls", function.getUrl());
                 menu.add(menuLevel1);
             }
         }
@@ -392,6 +392,12 @@ public class UserServiceImpl implements UserService {
         return  myResponse;
     }
 
+    /**
+     * 获取当前在线用户方法
+     * @param request
+     * @param response
+     * @return
+     */
     @Override
     public MyResponse onlines(HttpServletRequest request, HttpServletResponse response) {
 

@@ -8451,7 +8451,7 @@ jQuery.ajaxSettings.xhr = function() {
 var xhrId = 0,
 	xhrCallbacks = {},
 	xhrSuccessStatus = {
-		// fileupload protocol always yields status code 0, assume 200
+		// file protocol always yields status code 0, assume 200
 		0: 200,
 		// Support: IE9
 		// #1450: sometimes IE returns 1223 when it should be 204
@@ -8522,7 +8522,7 @@ jQuery.ajaxTransport(function( options ) {
 								xhr.abort();
 							} else if ( type === "error" ) {
 								complete(
-									// fileupload: protocol always yields status 0; see #8605, #14207
+									// file: protocol always yields status 0; see #8605, #14207
 									xhr.status,
 									xhr.statusText
 								);
@@ -9065,8 +9065,8 @@ jQuery.fn.andSelf = jQuery.fn.addBack;
 // files that may use define, but not via a proper concatenation script that
 // understands anonymous AMD modules. A named AMD is safest and most robust
 // way to register. Lowercase jquery is used because AMD module names are
-// derived from fileupload names, and jQuery is normally delivered in a lowercase
-// fileupload name. Do this after creating the global so that if an AMD module wants
+// derived from file names, and jQuery is normally delivered in a lowercase
+// file name. Do this after creating the global so that if an AMD module wants
 // to call noConflict to hide this version of jQuery, it will work.
 if ( typeof define === "function" && define.amd ) {
 	define( "jquery", [], function() {

@@ -14,9 +14,43 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #loading {
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index: 999999999;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: darkgray;
+            opacity: 0.7;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        #loading img {
+            width: 10%;
+            position: absolute;
+            top: 45%;
+            left: 45%;
+        }
+    </style>
 </head>
 
 <body>
+<div id="loading">
+    <img src="img/loading.gif" />
+</div>
 <!-- Top content -->
 <div class="top-content">
     <div class="inner-bg">
@@ -57,13 +91,25 @@
                 <div class="col-sm-6 col-sm-offset-3 social-login">
                     <h3>...or login with:</h3>
                     <div class="social-login-buttons">
-                        <a class="btn btn-link-1 btn-link-1-Wechat" href="wechatLogin">
+                        <a class="btn btn-link-1 btn-link-1-Wechat" href="#" id="wechatLoginBtn">
                             <i class="glyphicon glyphicon-heart-empty"></i> Wechat
                         </a>
                         <a class="btn btn-link-1 btn-link-1-QQ" href="#">
                             <i class="glyphicon glyphicon-heart-empty"></i> QQ
                         </a>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="wechatWebLoginModal" tabindex="-1" role="dialog" aria-labelledby="wechatWebLoginModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">微信登陆</h4>
+                    </div>
+                    <div class="modal-body" id="qrcode"></div>
                 </div>
             </div>
         </div>
@@ -77,6 +123,7 @@
 <script src="js/jquery.backstretch.min.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
+
         /*
          Fullscreen background
          */
@@ -97,7 +144,7 @@
             $(this).removeClass('input-error');
         });
 
-        //登陆操作
+        //常规登陆操作
         $('.login-form').on('submit', function(e) {
 
             //阻止默认提交
@@ -129,6 +176,30 @@
                 });
         });
 
+
+        //微信登陆操作
+        $("#wechatLoginBtn").click(function(e) {
+            //阻止默认跳转
+            e.preventDefault();
+            //显示loading
+            $("#loading").css("display", "block");
+            //请求登陆二维码
+            AJAX.request("GET", "wechatWeb/qrcode", {}, function(result) {
+                //模态框，加载登陆二维码
+                $("#qrcode").html("");
+                $("#qrcode").append($('<img src="' + result + '" />'));
+                //模态框，出现
+                $("#wechatWebLoginModal").modal("show");
+                //隐藏loading
+                $("#loading").css("display", "none");
+
+                //获取扫码结果
+                AJAX.request("GET", "wechatWeb/login", {}, function(result) {
+                    //如果成功，则跳转
+                    window.location.href = result;
+                });
+            });
+        });
     });
 </script>
 </body>

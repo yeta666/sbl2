@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50544
 File Encoding         : 65001
 
-Date: 2018-05-21 22:38:01
+Date: 2018-06-06 12:44:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -101,8 +101,8 @@ CREATE TABLE `seckill` (
 -- ----------------------------
 -- Records of seckill
 -- ----------------------------
-INSERT INTO `seckill` VALUES ('1', '1元秒杀iphoneX', '0', '2018-05-20 02:00:00', '2018-05-21 15:51:07', '2018-05-21 21:26:32');
-INSERT INTO `seckill` VALUES ('2', '2元秒杀iphone8', '16', '2018-05-21 22:13:57', '2018-06-01 15:52:00', '2018-05-21 22:35:09');
+INSERT INTO `seckill` VALUES ('1', '1元秒杀iphoneX', '100', '2018-05-20 02:00:00', '2018-05-21 15:51:07', '2018-05-23 16:27:03');
+INSERT INTO `seckill` VALUES ('2', '2元秒杀iphone8', '94', '2018-05-21 22:13:57', '2018-06-01 15:52:00', '2018-05-23 16:28:24');
 INSERT INTO `seckill` VALUES ('3', '3元秒杀iphone7', '30', '2018-05-23 15:52:26', '2018-05-23 15:52:29', '2018-05-21 20:38:29');
 
 -- ----------------------------
@@ -121,7 +121,7 @@ CREATE TABLE `seckill_successed` (
 -- ----------------------------
 -- Records of seckill_successed
 -- ----------------------------
-INSERT INTO `seckill_successed` VALUES ('2', 'admin', 'admin', '0', '2018-05-21 22:35:09');
+INSERT INTO `seckill_successed` VALUES ('2', 'admin', 'admin', '0', '2018-05-23 16:28:24');
 
 -- ----------------------------
 -- Table structure for user
@@ -135,16 +135,17 @@ CREATE TABLE `user` (
   `email` varchar(50) NOT NULL,
   `state` tinyint(1) unsigned DEFAULT NULL,
   `code` varchar(50) NOT NULL,
+  `uin` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('4', 'yeta1', 'yeta1', 'yeta1', '1806672430@qq.com', '1', '05d55cd5e35040eb9ef87f2256313ce8');
-INSERT INTO `user` VALUES ('5', 'admin', 'admin', 'admin', 'admin@admin.com', '1', 'admin');
-INSERT INTO `user` VALUES ('6', 'student', 'student', 'student', 'student@student.com', '1', 'student');
-INSERT INTO `user` VALUES ('7', 'teacher', 'teacher', 'teacher', 'teacher@teacher.com', '1', 'teacher');
+INSERT INTO `user` VALUES ('4', 'yeta1', 'yeta1', 'yeta1', '1806672430@qq.com', '1', '05d55cd5e35040eb9ef87f2256313ce8', null);
+INSERT INTO `user` VALUES ('5', 'admin', 'admin', 'admin', 'admin@admin.com', '1', 'admin', '1004543278');
+INSERT INTO `user` VALUES ('6', 'student', 'student', 'student', 'student@student.com', '1', 'student', null);
+INSERT INTO `user` VALUES ('7', 'teacher', 'teacher', 'teacher', 'teacher@teacher.com', '1', 'teacher', null);
 
 -- ----------------------------
 -- Table structure for user_role

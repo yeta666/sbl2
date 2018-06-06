@@ -18,6 +18,8 @@ public class User {
 
     private String code;
 
+    private Integer uin;
+
     /**
      * @return id
      */
@@ -116,16 +118,17 @@ public class User {
         this.code = code;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", state=" + state +
-                ", code='" + code + '\'' +
-                '}';
+    /**
+     * @return uin
+     */
+    public Integer getUin() {
+        return uin;
+    }
+
+    /**
+     * @param uin
+     */
+    public void setUin(Integer uin) {
+        this.uin = uin;
     }
 }

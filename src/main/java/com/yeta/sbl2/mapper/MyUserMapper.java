@@ -13,4 +13,6 @@ public interface MyUserMapper {
     User findUserByCode(String code);
 
     User findUserByUsername(String username);
+
+    User findByUin(Integer uin);
 }

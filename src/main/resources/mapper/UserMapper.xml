@@ -12,5 +12,6 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="state" jdbcType="BIT" property="state" />
     <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="uin" jdbcType="INTEGER" property="uin" />
   </resultMap>
 </mapper>

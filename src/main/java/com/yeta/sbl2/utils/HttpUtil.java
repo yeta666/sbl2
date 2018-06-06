@@ -54,7 +54,9 @@ public class HttpUtil {
         String result = "";
         DefaultHttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
-        post.setEntity(new StringEntity(outStr, "UTF-8"));
+        if (!"".equals(outStr) && outStr != null) {
+            post.setEntity(new StringEntity(outStr, "UTF-8"));
+        }
         HttpResponse response = client.execute(post);
         HttpEntity entity = response.getEntity();
         if (entity != null) {

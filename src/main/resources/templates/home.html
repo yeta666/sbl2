@@ -5,16 +5,70 @@
     <meta charset="UTF-8">
     <title>首页</title>
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            padding-top: 70px;
+        }
+
+        th, caption {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="home">Brand</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="home">首页 <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        您好，<span id="name">YETA</span>！
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">个人中心</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a id="logoutBtn" href="#">
+                                <span class="glyphicon glyphicon-log-out"></span>
+                                注销
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
 
 <div class="container">
-    <div>
-        <button class="btn btn-danger" id="logoutBtn">注销</button>
-    </div>
-
-    <br/>
 
     <h1 style="text-align: center;">权限管理</h1>
     <ul id="menu"></ul>
@@ -23,15 +77,15 @@
 
     <h1 style="text-align: center;">秒杀业务</h1>
     <table class="table table-responsive text-center">
-        <caption class="text-center">秒杀列表</caption>
+        <caption>秒杀列表</caption>
         <thead>
         <tr>
-            <th class="text-center">序号</th>
-            <th class="text-center">描述</th>
-            <th class="text-center">剩余</th>
-            <th class="text-center">开始时间</th>
-            <th class="text-center">结束时间</th>
-            <th class="text-center">操作</th>
+            <th>序号</th>
+            <th>描述</th>
+            <th>剩余</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody id="seckills"></tbody>
@@ -41,29 +95,32 @@
     <br />
 
     <h1 style="text-align: center;">文件上传下载</h1>
-    <table class="table table-responsive text-center">
-        <caption class="text-center">文件列表</caption>
-        <thead>
-        <tr>
-            <th class="text-center">序号</th>
-            <th class="text-center">文件名</th>
-            <th class="text-center" colspan="2">操作</th>
-        </tr>
-        </thead>
-        <tbody id="files"></tbody>
-    </table>
     <div>
+        <div class="col-sm-2">
+            <button id="downloadBtn" class="btn btn-success">下载</button>
+        </div>
         <form class="form col-sm-4" id="uploadForm" enctype="multipart/form-data">
             <input class="btn btn-success" type="file" name="file" />
         </form>
         <div class="col-sm-2">
             <button id="uploadBtn" class="btn btn-success">上传</button>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="progress" id="uploadProgress"></div>
         </div>
     </div>
-
+    <table class="table table-responsive text-center">
+        <caption>文件列表</caption>
+        <thead>
+        <tr>
+            <th><input type="checkbox" id="allCheckBtn" /></th>
+            <th>序号</th>
+            <th>文件名</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="files"></tbody>
+    </table>
     <br />
 </div>
 
@@ -176,37 +233,37 @@
     //封装文件上传下载相关请求
     var FILE = {
         urls: {
-            listUrl: function() {
+            listUrl: function () {
                 return "/sbl2/file/list";
             },
-            uploadUrl: function() {
+            uploadUrl: function () {
                 return "/sbl2/file/upload";
             },
-            downloadUrl: function() {
+            downloadUrl: function () {
                 return "/sbl2/file/download";
             },
-            deleteUrl: function() {
+            deleteUrl: function () {
                 return "/sbl2/file/delete";
             }
         },
-        list: function() {
+        list: function () {
             //清空文件列表
             $("#files").html("");
             //请求文件列表
-            AJAX.request("GET", FILE.urls.listUrl(), {}, function(result) {
+            AJAX.request("GET", FILE.urls.listUrl(), {}, function (result) {
                 //加载到表格中
-                for(var i = 0; i < result.length; i++) {
-                    $tr = $('<tr><td>' + (i + 1) + '</td><td>' + result[i] + '</td></tr>');
-                    $td = $('<td><a class="btn btn-info" href="' + FILE.urls.downloadUrl() + "?fileName=" + result[i] + '">下载</a></td>');
-                    $td.append($('<button style="margin-left: 10px;" class="btn btn-danger" fileName="' + result[i] + '">删除</button>').click(function() {
-                        FILE.delete($(this).attr("fileName"));
+                for (var i = 0; i < result.length; i++) {
+                    $tr = $('<tr fileName="' + result[i] + '"><td><input type="checkbox" class="checkBtn" /></td><td>' + (i + 1) + '</td><td>' + result[i] + '</td></tr>');
+                    $td = $('<td></td>');
+                    $td.append($('<button style="margin-left: 10px;" class="btn btn-danger">删除</button>').click(function () {
+                        FILE.delete($(this).parent().parent().attr("fileName"));
                     }));
                     $tr.append($td);
                     $("#files").append($tr);
                 }
             });
         },
-        upload: function() {
+        upload: function () {
             //设置进度条
             FILE.progress(0);
             //使用FormData对象来封装上传文件
@@ -222,20 +279,20 @@
                 //自动加上正确的Content-Type
                 contentType: false,
                 //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数
-                xhr: function() {
+                xhr: function () {
                     $xhr = $.ajaxSettings.xhr();
                     //判断upload属性是否存在
-                    if($xhr.upload) {
+                    if ($xhr.upload) {
                         //绑定progress事件的回调函数
-                        $xhr.upload.addEventListener('progress', function(e) {
+                        $xhr.upload.addEventListener('progress', function (e) {
                             FILE.progress(e.loaded / e.total * 100);
                         }, false);
                     }
                     //返回xhr对象给jQuery使用
                     return $xhr;
                 },
-                success: function(data) {
-                    if(data.success) {
+                success: function (data) {
+                    if (data.success) {
                         //设置进度条
                         FILE.progress(100);
                         //重新获取文件列表
@@ -244,31 +301,52 @@
                         alert(data.message);
                     }
                 },
-                error: function(XHR) {
+                error: function (XHR) {
                     alert(XHR.status);
                 }
             });
         },
-        delete: function(fileName) {
+        delete: function (fileName) {
             //发送删除文件请求
-            AJAX.request("POST", FILE.urls.deleteUrl(), { "fileName": fileName }, function(result) {
+            AJAX.request("POST", FILE.urls.deleteUrl(), {"fileName": fileName}, function (result) {
                 //重新获取文件列表
                 FILE.list();
             });
         },
-        progress: function(now) {
+        progress: function (now) {
             $("#uploadProgress").html('<div class="progress-bar progress-bar-success progress-bar-striped active" ' +
                 'role="progressbar" aria-valuenow="' + now + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + now + '%">' +
                 '<span class="sr-only">' + now + '% Complete</span></div>');
+        },
+        download: function () {
+            //获取哪些被选中
+            $checkBtn = $(".checkBtn");
+            var fileNames = "";
+            //遍历所有，将选中的文件的文件名拼接起来
+            for (var i = 0; i < $checkBtn.length; i++) {
+                if ($checkBtn[i].checked) {
+                    fileNames = fileNames + $($checkBtn[i]).parent().parent().attr("fileName") + ",";
+                }
+            }
+            if (fileNames == "") {
+                alert("请选择要下载的文件！");
+                return;
+            }
+            //去掉最后一个逗号
+            fileNames = fileNames.substring(0, fileNames.length - 1);
+
+            //请求下载
+            window.location.href = FILE.urls.downloadUrl() + "?fileNames=" + fileNames;
         }
-    }
+    };
 </script>
 
 <script type="text/javascript" charset="utf-8">
     $(function() {
 
         //注销
-        $("#logoutBtn").click(function() {
+        $("#logoutBtn").click(function(e) {
+            e.preventDefault();
             AJAX.request("GET", "/sbl2/user/logout", {}, function(result) {
                 window.location.href = result;
             });
@@ -296,6 +374,25 @@
         //上传文件按钮绑定事件
         $("#uploadBtn").click(function() {
             FILE.upload();
+        });
+
+        //全选，反选
+        $("#allCheckBtn").click(function() {
+            $checkBtn = $(".checkBtn");
+            //遍历所有
+            for (var i = 0; i < $checkBtn.length; i++) {
+                if ($(this)[0].checked) {
+                    //全选
+                    $checkBtn[i].checked = true;
+                } else {
+                    //反选
+                    $checkBtn[i].checked = false;
+                }
+            }
+        });
+
+        $("#downloadBtn").click(function() {
+            FILE.download();
         });
     });
 </script>

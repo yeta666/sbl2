@@ -36,7 +36,7 @@ public class FileController {
     }
 
     @GetMapping(value = "/download")
-    public MyResponse download(@RequestParam(value = "fileName") String fileName, HttpServletResponse response) throws IOException {
-        return fileService.download(fileName, response);
+    public void download(@RequestParam(value = "fileNames") String fileNames, HttpServletResponse response) throws Exception {
+        fileService.download(fileNames, response);
     }
 }

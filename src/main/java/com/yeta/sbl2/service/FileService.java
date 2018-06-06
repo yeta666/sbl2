@@ -19,5 +19,5 @@ public interface FileService {
 
     MyResponse delete(String fileName);
 
-    MyResponse download(String fileName, HttpServletResponse response) throws IOException;
+    void download(String fileName, HttpServletResponse response) throws Exception;
 }

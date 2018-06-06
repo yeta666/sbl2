@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 文件上传下载逻辑层实现
@@ -115,46 +117,96 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 下载文件方法
-     * @param fileName
+     * @param fileNames
      * @param response
      * @return
      * @throws IOException
      */
     @Override
-    public MyResponse download(String fileName, HttpServletResponse response) throws IOException {
+    public void download(String fileNames, HttpServletResponse response) throws Exception {
 
-        //创建文件
-        File file = new File(path + saveDirName + File.separator + fileName);
+        //处理要下载的文件名
+        String[] fileNamesArray = fileNames.split(",");
 
-        //判断文件是否存在
-        if (!file.exists()) {
-            return new MyResponse(false, FILE_NOT_EXISTS);
-        }
-
+        //强制下载
         response.setContentType("application/force-download");
-        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
 
-        //文件输入流
-        FileInputStream fileInputStream = new FileInputStream(file);
+        //判断是单个文件下载还是批量下载
+        if (fileNamesArray.length == 1) {
+            //单个文件下载
 
-        //文件输出流
-        OutputStream outputStream = response.getOutputStream();
+            String fileName = fileNamesArray[0];
+            //创建文件
+            File file = new File(path + saveDirName + File.separator + fileName);
+            //判断文件是否存在
+            if (!file.exists()) {
+                throw new Exception(FILE_NOT_EXISTS);
+            }
 
-        //文件输入流缓冲区
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+            //设置下载文件的文件名
+            response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
 
-        //缓冲区
-        byte[] buffer = new byte[1024];
+            //将 文件内容 从 文件 读取到 文件输入流
+            FileInputStream fileInputStream = new FileInputStream(file);
+            //将 文件内容 从 文件输入流 读取到 缓存输入流
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+            //初始化响应输出流
+            OutputStream outputStream = response.getOutputStream();
+            //缓冲区
+            byte[] buffer = new byte[1024];
+            //将 文件内容 从 缓存输入流 读取到 缓冲区 并通过 响应输出流 输出
+            while (bufferedInputStream.read(buffer) != -1) {
+                outputStream.write(buffer);
+            }
 
-        //读到缓冲区，然后通过文件输出流输出
-        while (bufferedInputStream.read(buffer) != -1) {
-            outputStream.write(buffer);
+            //清理
+            fileInputStream.close();
+            outputStream.close();
+            bufferedInputStream.close();
+        } else {
+            //批量下载
+
+            //设置压缩包的文件名
+            response.setHeader("Content-Disposition", "attachment;fileName=all.zip");
+
+            //初始化压缩输出流
+            ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
+
+            //将所有文件添加到压缩文件中
+            for (String fileName : fileNamesArray) {
+                //创建文件
+                File file = new File(path + saveDirName + File.separator + fileName);
+                //判断文件是否存在
+                if (!file.exists()) {
+                    //如果不存在则跳过
+                    continue;
+                }
+
+                //设置文件名
+                zipOutputStream.putNextEntry(new ZipEntry(fileName));
+
+                //将 文件内容 从 文件 读取到 文件输入流
+                FileInputStream fileInputStream = new FileInputStream(file);
+                //将 文件内容 从 文件输入流 读取到 缓存输入流
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+                //缓冲区
+                byte[] buffer = new byte[1024];
+                //将 文件内容 从 缓存输入流 读取到 缓冲区 并通过 压缩输出流 输出
+                while (bufferedInputStream.read(buffer) != -1) {
+                    zipOutputStream.write(buffer);
+                }
+
+                //刷新压缩文件流
+                zipOutputStream.flush();
+                //关闭文件输入流、缓冲输入流
+                fileInputStream.close();
+                bufferedInputStream.close();
+            }
+
+            //注释信息
+            zipOutputStream.setComment("");
+            zipOutputStream.flush();
+            zipOutputStream.finish();
         }
-
-        //关闭输入输出流
-        fileInputStream.close();
-        outputStream.close();
-
-        return new MyResponse();
     }
 }

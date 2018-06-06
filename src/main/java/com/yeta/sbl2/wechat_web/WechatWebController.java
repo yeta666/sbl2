@@ -33,13 +33,13 @@ import java.util.Map;
 @RequestMapping(value = "/wechatWeb")
 public class WechatWebController {
 
-    private static String uuid = "";
+    private String uuid = "";
 
-    private static String redirectURI = "";
+    private String redirectURI = "";
 
-    private static Map<String, String> loginInfo = new HashMap<>();
+    private Map<String, String> loginInfo = new HashMap<>();
 
-    private static WechatWebUser wechatWebUser = null;
+    private WechatWebUser wechatWebUser = null;
 
     @Autowired
     private MyUserMapper myUserMapper;
@@ -125,7 +125,7 @@ public class WechatWebController {
      * 获取登录二维码
      * @throws Exception
      */
-    public static void getQRCODE() throws Exception {
+    public void getQRCODE() throws Exception {
         HttpUtil httpUtil = new HttpUtil();
         //判断uuid是否存在
         if ("".equals(uuid)) {
@@ -138,7 +138,7 @@ public class WechatWebController {
      * 获取扫码登陆状态和结果
      * @throws Exception
      */
-    public static void getScanLoginResult() throws Exception {
+    public void getScanLoginResult() throws Exception {
         HttpUtil httpUtil = new HttpUtil();
         int tip = 1;    //未扫描
         //判断uuid是否存在
@@ -167,7 +167,7 @@ public class WechatWebController {
      * @throws IOException
      * @throws DocumentException
      */
-    public static void getLoginInfo() throws Exception {
+    public void getLoginInfo() throws Exception {
         //读取xml对象
         SAXReader reader = new SAXReader();
         //判断redirectURI是否存在
@@ -185,14 +185,28 @@ public class WechatWebController {
 
     /**
      * 微信初始化
-     *
      * @throws IOException
      */
-    public static void wechatInit() throws Exception {
+    public void wechatInit() throws Exception {
+
+        //1. 获取初始化信息（账号、头像、好友、群组、公众号等，其中好友、群组、公众号等是最近活跃的）
+        getInitInfo();
+
+        //2. 开启微信状态通知
+        openStatusNotify();
+
+        //3. 获取好友列表
+        getMemberList();
+    }
+
+    /**
+     * 获取初始化信息（账号、头像、好友、群组、公众号等，其中好友、群组、公众号等是最近活跃的）
+     * @throws Exception
+     */
+    public void getInitInfo() throws Exception {
         if (loginInfo.size() == 0) {
             throw new Exception("获取loginInfo错误！");
         }
-        HttpUtil httpUtil = new HttpUtil();
         //初始化参数
         Map<String, Object> params = new HashMap<>();
         Map<String, String> baseRequest = new HashMap<>();
@@ -202,17 +216,54 @@ public class WechatWebController {
         baseRequest.put("DeviceID", "e123456789012345");
         params.put("BaseRequest", baseRequest);
         //POST请求
+        HttpUtil httpUtil = new HttpUtil();
         String result = httpUtil.doPostStr("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=" + System.currentTimeMillis() + "&lang=ch_ZN&pass_ticket=" + loginInfo.get("pass_ticket"),
                 JSON.toJSONString(params));
         //转换为模型对象
         wechatWebUser = JSON.parseObject(result, new TypeReference<WechatWebUser>() {});
     }
 
-    public static void main(String[] args) throws Exception {
-        /*getUUID();
-        getQRCODE();
-        getScanLoginResult();
-        getLoginInfo();
-        wechatInit();*/
+    /**
+     * 开启微信状态通知
+     * @throws IOException
+     */
+    public void openStatusNotify() throws Exception {
+        if (loginInfo.size() == 0) {
+            throw new Exception("获取loginInfo错误！");
+        }
+        //初始化参数
+        Map<String, Object> params = new HashMap<>();
+        Map<String, String> baseRequest = new HashMap<>();
+        baseRequest.put("Uin", loginInfo.get("wxuin"));
+        baseRequest.put("Sid", loginInfo.get("wxsid"));
+        baseRequest.put("Skey", loginInfo.get("skey"));
+        baseRequest.put("DeviceID", "e123456789012345");
+        params.put("BaseRequest", baseRequest);
+        params.put("Code", 3);
+        params.put("FromUserName", "yeta123");
+        params.put("ToUserName", "yeta123");
+        params.put("ClientMsgId", System.currentTimeMillis());
+        //POST请求
+        HttpUtil httpUtil = new HttpUtil();
+        String result = httpUtil.doPostStr("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxstatusnotify?lang=zh_CN&pass_ticket=" + loginInfo.get("pass_ticket"),
+                JSON.toJSONString(params));
+        System.out.println(result);
+    }
+
+    /**
+     * 获取好友列表
+     * @throws Exception
+     */
+    public void getMemberList() throws Exception {
+        if (loginInfo.size() == 0) {
+            throw new Exception("获取loginInfo错误！");
+        }
+
+        HttpUtil httpUtil = new HttpUtil();
+        String result = httpUtil.doGetStr("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact" +
+                "?r=" + System.currentTimeMillis() +
+                "&seq=0" +
+                "&skey=" + loginInfo.get("skey"));
+        System.out.println(result);
     }
 }

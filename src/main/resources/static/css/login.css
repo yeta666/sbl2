@@ -1,9 +1,12 @@
 html, body {
 	width: 100%;
 	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
 }
 
-body {
+.myLogin {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 	font-weight: 300;
@@ -12,13 +15,13 @@ body {
 	text-align: center;
 }
 
-strong {
+.myLogin strong {
 	font-weight: 500;
 }
 
-a,
-a:hover,
-a:focus {
+.myLogin a,
+.myLogin a:hover,
+.myLogin a:focus {
 	color: #4aaf51;
 	text-decoration: none;
 	-o-transition: all .3s;
@@ -28,8 +31,8 @@ a:focus {
 	transition: all .3s;
 }
 
-h1,
-h2 {
+.myLogin h1,
+.myLogin h2 {
 	margin-top: 10px;
 	font-size: 38px;
 	font-weight: 100;
@@ -37,30 +40,30 @@ h2 {
 	line-height: 50px;
 }
 
-h3 {
+.myLogin h3 {
 	font-size: 22px;
 	font-weight: 300;
 	color: #555;
 	line-height: 30px;
 }
 
-img {
+.myLogin img {
 	max-width: 100%;
 }
 
-::-moz-selection {
+.myLogin ::-moz-selection {
 	background: #4aaf51;
 	color: #fff;
 	text-shadow: none;
 }
 
-::selection {
+.myLogin ::selection {
 	background: #4aaf51;
 	color: #fff;
 	text-shadow: none;
 }
 
-.btn-link-1 {
+.myLogin .btn-link-1 {
 	display: inline-block;
 	height: 50px;
 	margin: 5px;
@@ -75,30 +78,30 @@ img {
 	border-radius: 4px;
 }
 
-.btn-link-1:hover,
-.btn-link-1:focus,
-.btn-link-1:active {
+.myLogin .btn-link-1:hover,
+.myLogin .btn-link-1:focus,
+.myLogin .btn-link-1:active {
 	outline: 0;
 	opacity: 0.6;
 	color: #fff;
 }
 
-.btn-link-1.btn-link-1-Wechat {
+.myLogin .btn-link-1.btn-link-1-Wechat {
 	background: #4862a3;
 }
 
-.btn-link-1.btn-link-1-QQ {
+.myLogin .btn-link-1.btn-link-1-QQ {
 	background: #55acee;
 }
 
-.btn-link-1 i {
+.myLogin .btn-link-1 i {
 	padding-right: 5px;
 	vertical-align: middle;
 	font-size: 20px;
 	line-height: 20px;
 }
 
-.btn-link-2 {
+.myLogin .btn-link-2 {
 	display: inline-block;
 	height: 50px;
 	margin: 5px;
@@ -114,10 +117,10 @@ img {
 	border-radius: 4px;
 }
 
-.btn-link-2:hover,
-.btn-link-2:focus,
-.btn-link-2:active,
-.btn-link-2:active:focus {
+.myLogin .btn-link-2:hover,
+.myLogin .btn-link-2:focus,
+.myLogin .btn-link-2:active,
+.myLogin .btn-link-2:active:focus {
 	outline: 0;
 	opacity: 0.6;
 	background: rgba(0, 0, 0, 0.3);
@@ -127,40 +130,40 @@ img {
 
 /***** Top content *****/
 
-.inner-bg {
+.myLogin .inner-bg {
 	padding: 100px 0 170px 0;
 }
 
-.top-content .text {
+.myLogin .top-content .text {
 	color: #fff;
 }
 
-.top-content .text h1 {
+.myLogin .top-content .text h1 {
 	color: #fff;
 }
 
-.top-content .description {
+.myLogin .top-content .description {
 	margin: 20px 0 10px 0;
 }
 
-.top-content .description p {
+.myLogin .top-content .description p {
 	opacity: 0.8;
 }
 
-.top-content .description a {
+.myLogin .top-content .description a {
 	color: #fff;
 }
 
-.top-content .description a:hover,
-.top-content .description a:focus {
+.myLogin .top-content .description a:hover,
+.myLogin .top-content .description a:focus {
 	border-bottom: 1px dotted #fff;
 }
 
-.form-box {
+.myLogin .form-box {
 	margin-top: 35px;
 }
 
-.form-top {
+.myLogin .form-top {
 	overflow: hidden;
 	padding: 0 25px 15px 25px;
 	background: #fff;
@@ -170,17 +173,17 @@ img {
 	text-align: left;
 }
 
-.form-top-left {
+.myLogin .form-top-left {
 	float: left;
 	width: 75%;
 	padding-top: 25px;
 }
 
-.form-top-left h3 {
+.myLogin .form-top-left h3 {
 	margin-top: 0;
 }
 
-.form-top-right {
+.myLogin .form-top-right {
 	float: left;
 	width: 25%;
 	padding-top: 5px;
@@ -190,7 +193,7 @@ img {
 	text-align: right;
 }
 
-.form-bottom {
+.myLogin .form-bottom {
 	padding: 25px 25px 30px 25px;
 	background: #eee;
 	-moz-border-radius: 0 0 4px 4px;
@@ -199,31 +202,31 @@ img {
 	text-align: left;
 }
 
-.form-bottom form textarea {
+.myLogin .form-bottom form textarea {
 	height: 100px;
 }
 
-.form-bottom form button.btn {
+.myLogin .form-bottom form button.btn {
 	width: 100%;
 }
 
-.form-bottom form .input-error {
+.myLogin .form-bottom form .input-error {
 	border-color: #4aaf51;
 }
 
-.social-login {
+.myLogin .social-login {
 	margin-top: 35px;
 }
 
-.social-login h3 {
+.myLogin .social-login h3 {
 	color: #fff;
 }
 
-.social-login-buttons {
+.myLogin .social-login-buttons {
 	margin-top: 25px;
 }
 
-.copyrights {
+.myLogin .copyrights {
 	text-indent: -9999px;
 	height: 0;
 	line-height: 0;
@@ -239,22 +242,22 @@ img {
 @media (min-width: 768px) and (max-width: 991px) {}
 
 @media (max-width: 767px) {
-	.inner-bg {
+	.myLogin .inner-bg {
 		padding: 60px 0 110px 0;
 	}
 }
 
 @media (max-width: 415px) {
-	h1,
-	h2 {
+	.myLogin h1,
+	.myLogin h2 {
 		font-size: 32px;
 	}
 }
 
-input[type="text"],
-input[type="password"],
-textarea,
-textarea.form-control {
+.myLogin input[type="text"],
+.myLogin input[type="password"],
+.myLogin textarea,
+.myLogin textarea.form-control {
 	height: 50px;
 	margin: 0;
 	padding: 0 20px;
@@ -279,17 +282,17 @@ textarea.form-control {
 	transition: all .3s;
 }
 
-textarea,
-textarea.form-control {
+.myLogin textarea,
+.myLogin textarea.form-control {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	line-height: 30px;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-textarea:focus,
-textarea.form-control:focus {
+.myLogin input[type="text"]:focus,
+.myLogin input[type="password"]:focus,
+.myLogin textarea:focus,
+.myLogin textarea.form-control:focus {
 	outline: 0;
 	background: #fff;
 	border: 3px solid #ccc;
@@ -298,28 +301,28 @@ textarea.form-control:focus {
 	box-shadow: none;
 }
 
-input[type="text"]:-moz-placeholder,
-input[type="password"]:-moz-placeholder,
-textarea:-moz-placeholder,
-textarea.form-control:-moz-placeholder {
+.myLogin input[type="text"]:-moz-placeholder,
+.myLogin input[type="password"]:-moz-placeholder,
+.myLogin textarea:-moz-placeholder,
+.myLogin textarea.form-control:-moz-placeholder {
 	color: #888;
 }
 
-input[type="text"]:-ms-input-placeholder,
-input[type="password"]:-ms-input-placeholder,
-textarea:-ms-input-placeholder,
-textarea.form-control:-ms-input-placeholder {
+.myLogin input[type="text"]:-ms-input-placeholder,
+.myLogin input[type="password"]:-ms-input-placeholder,
+.myLogin textarea:-ms-input-placeholder,
+.myLogin textarea.form-control:-ms-input-placeholder {
 	color: #888;
 }
 
-input[type="text"]::-webkit-input-placeholder,
-input[type="password"]::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder,
-textarea.form-control::-webkit-input-placeholder {
+.myLogin input[type="text"]::-webkit-input-placeholder,
+.myLogin input[type="password"]::-webkit-input-placeholder,
+.myLogin textarea::-webkit-input-placeholder,
+.myLogin textarea.form-control::-webkit-input-placeholder {
 	color: #888;
 }
 
-button.btn {
+.myLogin button.btn {
 	height: 50px;
 	margin: 0;
 	padding: 0 20px;
@@ -345,12 +348,12 @@ button.btn {
 	transition: all .3s;
 }
 
-button.btn:hover {
+.myLogin button.btn:hover {
 	opacity: 0.6;
 	color: #fff;
 }
 
-button.btn:active {
+.myLogin button.btn:active {
 	outline: 0;
 	opacity: 0.6;
 	color: #fff;
@@ -359,15 +362,15 @@ button.btn:active {
 	box-shadow: none;
 }
 
-button.btn:focus {
+.myLogin button.btn:focus {
 	outline: 0;
 	opacity: 0.6;
 	background: #4aaf51;
 	color: #fff;
 }
 
-button.btn:active:focus,
-button.btn.active:focus {
+.myLogin button.btn:active:focus,
+.myLogin button.btn.active:focus {
 	outline: 0;
 	opacity: 0.6;
 	background: #4aaf51;

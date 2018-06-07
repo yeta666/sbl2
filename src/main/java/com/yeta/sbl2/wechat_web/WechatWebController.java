@@ -139,6 +139,9 @@ public class WechatWebController {
      * @throws Exception
      */
     public void getScanLoginResult() throws Exception {
+        //记录开始时间
+        long startTime = System.currentTimeMillis();
+
         HttpUtil httpUtil = new HttpUtil();
         int tip = 1;    //未扫描
         //判断uuid是否存在
@@ -146,6 +149,11 @@ public class WechatWebController {
             throw new Exception("获取UUID发生错误！");
         }
         while (true) {
+            //判断是否超时，超时限制为1分钟
+            if (System.currentTimeMillis() - startTime >= 1000 * 60) {
+                throw new Exception("登陆超时，请重试！");
+            }
+
             String result = httpUtil.doGetStr("https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?uuid=" + uuid + "&tip=" + tip + "&_=" + System.currentTimeMillis());
             Integer code = Integer.valueOf(result.substring(result.indexOf("=") + 1, result.indexOf(";")));
             if (code == 408) {
@@ -153,7 +161,6 @@ public class WechatWebController {
             } else if (code == 201){
                 System.out.println("已扫描，等待确认！");
                 tip = 0;    //已扫描
-                Thread.sleep(100);
             } else if (code == 200) {
                 redirectURI = result.substring(result.indexOf("\"") + 1, result.lastIndexOf(";") - 1);
                 System.out.println("已确认，跳转地址：" + redirectURI);

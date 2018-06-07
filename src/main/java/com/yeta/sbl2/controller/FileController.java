@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.List;
 
 /**
  * 文件上传下载接口
@@ -26,8 +27,8 @@ public class FileController {
     }
 
     @PostMapping(value = "/upload")
-    public MyResponse upload(@RequestParam(value = "file", required = true) MultipartFile file) throws IOException {
-        return fileService.upload(file);
+    public MyResponse upload(@RequestParam(value = "files", required = true) List<MultipartFile> files) throws IOException {
+        return fileService.upload(files);
     }
 
     @PostMapping(value = "/delete")

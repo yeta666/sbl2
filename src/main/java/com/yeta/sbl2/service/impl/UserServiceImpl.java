@@ -214,7 +214,7 @@ public class UserServiceImpl implements UserService {
      * @throws MessagingException
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public MyResponse register(User user) throws MessagingException {
         //设置用户状态为：未激活
         user.setState(false);
@@ -225,8 +225,7 @@ public class UserServiceImpl implements UserService {
         //发送激活邮件
         mailUtil.sendMail(user.getEmail(), user.getCode());
         //初始化返回对象
-        MyResponse myResponse = new MyResponse();
-        return myResponse;
+        return new MyResponse("请到邮箱激活账号！");
     }
 
     /**
@@ -235,18 +234,19 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public MyResponse active(String code) {
+    public MyResponse active(String code) throws Exception {
         //根据激活码查询用户
         User user = myUserMapper.findUserByCode(code);
-        if (user != null) {
-            //修改用户状态为：激活
-            user.setState(true);
-            //设置认证码为空
-            user.setCode(null);
-            updateUser(user);
+        if (user == null) {
+            throw new Exception("激活失败！");
         }
-        MyResponse myResponse = new MyResponse();
-        return myResponse;
+
+        //修改用户状态为：激活
+        user.setState(true);
+        //设置认证码为空
+        user.setCode("");
+        updateUser(user);
+        return new MyResponse("激活成功！");
     }
 
     /**
@@ -296,26 +296,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public MyResponse logout(HttpServletRequest request, HttpServletResponse response) {
 
-        //初始化返回结果
-        MyResponse myResponse = new MyResponse();
-
         //清除cookie
-        if (request.getCookies() != null) {
-            Cookie[] cookies = request.getCookies();
-            for (Cookie cookie : cookies) {
-                if ("sbl2Login".equals(cookie.getName())) {
-                    Cookie newCookie = new Cookie("sbl2Login", "false");
-                    newCookie.setPath("/");
-                    newCookie.setMaxAge(0);
-                    response.addCookie(newCookie);
-                }
-            }
-        }
+        Cookie newCookie = new Cookie("sbl2Login", null);
+        newCookie.setMaxAge(0);
+        newCookie.setPath(contextPath);
+        response.addCookie(newCookie);
 
-        myResponse.setSuccess(true);
-        myResponse.setData(contextPath + "/login");
-
-        return myResponse;
+        return new MyResponse(contextPath + "/login");
     }
 
     /**

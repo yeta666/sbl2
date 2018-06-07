@@ -68,28 +68,30 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 上传文件方法
-     * @param file
+     * @param files
      * @return
      * @throws IOException
      */
     @Override
-    public MyResponse upload(MultipartFile file) throws IOException {
+    public MyResponse upload(List<MultipartFile> files) throws IOException {
 
         //判断路径是否错误
         if (path == null || "".equals(path)) {
             return new MyResponse(false, FILE_PATH_ERROR);
         }
 
-        //创建文件
-        //设置文件名
-        String name = file.getOriginalFilename();
-        String namePrefix = name.substring(0, name.lastIndexOf("."));
-        String nameSuffix = name.substring(name.lastIndexOf("."), name.length());
-        File newFile = new File(path + saveDirName + File.separator + namePrefix + "_" + System.currentTimeMillis() + nameSuffix);
+        //遍历保存所有文件
+        for (MultipartFile file : files) {
+            //创建文件
+            //设置文件名
+            String name = file.getOriginalFilename();
+            String namePrefix = name.substring(0, name.lastIndexOf("."));
+            String nameSuffix = name.substring(name.lastIndexOf("."), name.length());
+            File newFile = new File(path + saveDirName + File.separator + namePrefix + "_" + System.currentTimeMillis() + nameSuffix);
 
-        //保存文件
-        file.transferTo(newFile);
-
+            //保存文件
+            file.transferTo(newFile);
+        }
         return new MyResponse();
     }
 

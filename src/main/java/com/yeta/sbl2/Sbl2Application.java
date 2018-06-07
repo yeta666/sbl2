@@ -126,7 +126,7 @@ public class Sbl2Application {
 
 		@Override
 		public void addInterceptors(InterceptorRegistry registry) {
-			registry.addInterceptor(myInterceptor).addPathPatterns("/*");
+			registry.addInterceptor(myInterceptor).addPathPatterns("/**");
 			super.addInterceptors(registry);
 		}
 	}
@@ -139,9 +139,9 @@ public class Sbl2Application {
 	public MultipartConfigElement multipartConfigElement() {
 		MultipartConfigFactory factory = new MultipartConfigFactory();
 		//单个文件最大（KB/MB）
-		factory.setMaxFileSize("10240MB");
+		factory.setMaxFileSize("10MB");
 		//设置总上传数据总大小
-		factory.setMaxRequestSize("102400MB");
+		factory.setMaxRequestSize("100MB");
 		return factory.createMultipartConfig();
 	}
 }

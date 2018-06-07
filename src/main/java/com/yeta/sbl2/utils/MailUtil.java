@@ -46,7 +46,7 @@ public class MailUtil {
         //设置收件人
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
         //设置主题
-        message.setSubject("用户注册激活邮件");
+        message.setSubject("账户激活邮件");
         //设置正文
         message.setContent("<h1>激活请点击以下连接：</h1><h2>http://localhost:8080/sbl2/user/active?code=" + code + "</h2>", "text/html;charset=UTF-8");
         //发送邮件

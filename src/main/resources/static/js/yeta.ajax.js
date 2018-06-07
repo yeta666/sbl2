@@ -1,6 +1,6 @@
 //封装AJAX请求
 var AJAX = {
-    request: function (type, url, data, handler) {
+    request: function (type, url, data, handler, errorHandler) {
         $.ajax({
             type: type,
             url: url,
@@ -11,6 +11,9 @@ var AJAX = {
                     handler(data.data);
                 } else {
                     alert(data.message);
+                    if (errorHandler) {
+                        errorHandler();
+                    }
                 }
             },
             error: function (XHR) {

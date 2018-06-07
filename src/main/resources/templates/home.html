@@ -100,7 +100,7 @@
             <button id="downloadBtn" class="btn btn-success">下载</button>
         </div>
         <form class="form col-sm-4" id="uploadForm" enctype="multipart/form-data">
-            <input class="btn btn-success" type="file" name="file" />
+            <input id="inputFiles" class="btn btn-success" type="file" name="files" multiple="multiple" />
         </form>
         <div class="col-sm-2">
             <button id="uploadBtn" class="btn btn-success">上传</button>
@@ -267,12 +267,12 @@
             //设置进度条
             FILE.progress(0);
             //使用FormData对象来封装上传文件
-            var file = new FormData($("#uploadForm")[0]);
+            var files = new FormData($("#uploadForm")[0]);
             //发送请求，需要设置processData和contentType
             $.ajax({
                 url: FILE.urls.uploadUrl(),
                 type: "POST",
-                data: file,
+                data: files,
                 dataType: "JSON",
                 //不处理发送的数据
                 processData: false,
@@ -337,6 +337,26 @@
 
             //请求下载
             window.location.href = FILE.urls.downloadUrl() + "?fileNames=" + fileNames;
+        },
+        validate: function() {
+            var $files = $("#inputFiles")[0].files;
+            var total = 0;
+            if ($files) {
+                for (var i = 0; i < $files.length; i++) {
+                    //如果单个文件大小大于1M
+                    if ($files[i].size > 1024 * 1024 * 10) {
+                        alert ("单个文件大小不能大于10M！");
+                        return false;
+                    }
+                    total += $files[i].size;
+                }
+                //如果总文件大小大于100M
+                if (total > 1024 * 1024 * 100) {
+                    alert ("总文件大小不能大于100M！");
+                    return false;
+                }
+            }
+            return true;
         }
     };
 </script>
@@ -373,10 +393,12 @@
 
         //上传文件按钮绑定事件
         $("#uploadBtn").click(function() {
-            FILE.upload();
+            if (FILE.validate()) {
+                FILE.upload();
+            }
         });
 
-        //全选，反选
+        //点击全选，反选单选框
         $("#allCheckBtn").click(function() {
             $checkBtn = $(".checkBtn");
             //遍历所有
@@ -391,6 +413,7 @@
             }
         });
 
+        //点击下载按钮
         $("#downloadBtn").click(function() {
             FILE.download();
         });

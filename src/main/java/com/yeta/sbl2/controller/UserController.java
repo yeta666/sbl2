@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/active")
-    public MyResponse active(@RequestParam(value = "code", required = true) String code) {
+    public MyResponse active(@RequestParam(value = "code", required = true) String code) throws Exception {
         return userService.active(code);
     }
 

@@ -29,7 +29,7 @@ public interface UserService {
 
     MyResponse register(User user) throws MessagingException;
 
-    MyResponse active(String code);
+    MyResponse active(String code) throws Exception;
 
     MyResponse login(String username, String password, HttpServletRequest request, HttpServletResponse response);
 

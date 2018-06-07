@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>登陆</title>
+    <title>Login</title>
     <!-- CSS -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/login.css">
@@ -16,13 +16,6 @@
     <![endif]-->
 
     <style type="text/css">
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
         #loading {
             width: 100%;
             height: 100%;
@@ -44,72 +37,121 @@
             top: 45%;
             left: 45%;
         }
+
+        #qrcode {
+            text-align: center;
+        }
+
+        #registerBtn {
+            width: 100%;
+        }
     </style>
 </head>
 
 <body>
+
 <div id="loading">
     <img src="img/loading.gif" />
 </div>
-<!-- Top content -->
-<div class="top-content">
-    <div class="inner-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2 text">
-                    <h1>Please <strong>Login</strong></h1>
-                    <div class="description"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3 form-box">
-                    <div class="form-top">
-                        <div class="form-top-left">
-                            <h3>Login to my site</h3>
-                            <p>Enter your username and password to log on:</p>
-                        </div>
-                        <div class="form-top-right">
-                            <i class="glyphicon glyphicon-check"></i>
-                        </div>
-                    </div>
-                    <div class="form-bottom">
-                        <form role="form" class="login-form">
-                            <div class="form-group">
-                                <label class="sr-only" for="username">Username</label>
-                                <input type="text" name="username" placeholder="Username..." class="form-username form-control" id="username">
-                            </div>
-                            <div class="form-group">
-                                <label class="sr-only" for="password">Password</label>
-                                <input type="password" name="password" placeholder="Password..." class="form-password form-control" id="password">
-                            </div>
-                            <button type="submit" class="btn">Sign in!</button>
-                        </form>
+
+<div class="myLogin">
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text">
+                        <h1>Please <strong>Login</strong></h1>
+                        <div class="description"></div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3 social-login">
-                    <h3>...or login with:</h3>
-                    <div class="social-login-buttons">
-                        <a class="btn btn-link-1 btn-link-1-Wechat" href="#" id="wechatLoginBtn">
-                            <i class="glyphicon glyphicon-heart-empty"></i> Wechat
-                        </a>
-                        <a class="btn btn-link-1 btn-link-1-QQ" href="#">
-                            <i class="glyphicon glyphicon-heart-empty"></i> QQ
-                        </a>
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 form-box">
+                        <div class="form-top">
+                            <div class="form-top-left">
+                                <h3>Login to my site</h3>
+                                <p>Enter your username and password to log on:</p>
+                            </div>
+                            <div class="form-top-right">
+                                <i class="glyphicon glyphicon-check"></i>
+                            </div>
+                        </div>
+                        <div class="form-bottom">
+                            <form role="form" class="login-form">
+                                <div class="form-group">
+                                    <label class="sr-only" for="username">Username</label>
+                                    <input type="text" name="username" placeholder="Username..." class="form-username form-control" id="username">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="password">Password</label>
+                                    <input type="password" name="password" placeholder="Password..." class="form-password form-control" id="password">
+                                </div>
+                                <button type="submit" class="btn">Sign in!</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 social-login">
+                        <h3>
+                            <a href="#" data-toggle="modal" data-target="#registerModal">Register</a>
+                            ...or login with:
+                        </h3>
+                        <div class="social-login-buttons">
+                            <a class="btn btn-link-1 btn-link-1-Wechat" href="#" id="wechatLoginBtn">
+                                <i class="glyphicon glyphicon-heart-empty"></i> Wechat
+                            </a>
+                            <a class="btn btn-link-1 btn-link-1-QQ" href="#">
+                                <i class="glyphicon glyphicon-heart-empty"></i> QQ
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="wechatWebLoginModal" tabindex="-1" role="dialog" aria-labelledby="wechatWebLoginModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">微信登陆</h4>
-                    </div>
-                    <div class="modal-body" id="qrcode"></div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="wechatWebLoginModal" tabindex="-1" role="dialog" aria-labelledby="wechatWebLoginModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">微信登陆</h4>
+            </div>
+            <div class="modal-body" id="qrcode"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Register</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="registerUsername">Username</label>
+                    <input type="text" class="form-control" id="registerUsername" name="registerUsername" placeholder="" maxlength="">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" class="form-control" id="registerPassword" name="registerPassword" placeholder="" maxlength="">
+                </div>
+                <div class="form-group">
+                    <label for="registerName">Name</label>
+                    <input type="text" class="form-control" id="registerName" name="registerName" placeholder="" maxlength="">
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" class="form-control" id="registerEmail" name="registerEmail" placeholder="">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" id="registerBtn">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -122,31 +164,33 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="js/jquery.backstretch.min.js"></script>
 <script type="text/javascript">
-    jQuery(document).ready(function() {
-
-        /*
-         Fullscreen background
-         */
-        $.backstretch("img/background.jpg");
-
-        //页面加载获取在线人数
-        AJAX.request("GET", "/sbl2/user/onlines", {}, function(result) {
-            $(".description").html("当前在线人数：" + result.length);
-            /*for(var i = 0; i < result.length; i++) {
-                $(".description").append($('<p>' + result[i].id + '</p>'));
-            }*/
-        });
-
-        /*
-         Form validation
-         */
-        $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function() {
-            $(this).removeClass('input-error');
-        });
-
-        //常规登陆操作
-        $('.login-form').on('submit', function(e) {
-
+    var LOGIN = {
+        urls: {
+            onlinesUrl: function() {
+                return "user/onlines";
+            },
+            loginUrl: function() {
+                return "user/login";
+            },
+            wechatWebQrcodeUrl: function() {
+                return "wechatWeb/qrcode";
+            },
+            wechatWebLoginUrl: function() {
+                return "wechatWeb/login";
+            },
+            registerUrl: function() {
+                return "user/register";
+            }
+        },
+        onlines: function() {
+            AJAX.request("GET", LOGIN.urls.onlinesUrl(), {}, function(result) {
+                $(".description").html("当前在线人数：" + result.length);
+                /*for(var i = 0; i < result.length; i++) {
+                    $(".description").append($('<p>' + result[i].id + '</p>'));
+                }*/
+            });
+        },
+        login: function(e) {
             //阻止默认提交
             e.preventDefault();
 
@@ -154,54 +198,122 @@
             var $username = $("#username").val().trim();
             var $password = $("#password").val().trim();
 
-            //判断是否为空
+            //验证用户名和密码
             if($username == "") {
                 $("#username").addClass('input-error');
                 return;
             }
-
             if($password == "") {
                 $("#password").addClass('input-error');
                 return;
             }
 
             //请求登陆
-            AJAX.request("POST",
-                "/sbl2/user/login", {
-                    "username": $username,
-                    "password": $password
-                },
-                function(result) {
-                    window.location.href = result;
-                });
-        });
-
-
-        //微信登陆操作
-        $("#wechatLoginBtn").click(function(e) {
+            AJAX.request("POST", LOGIN.urls.loginUrl(), {
+                "username": $username,
+                "password": $password
+            }, function(result) {
+                window.location.href = result;
+            });
+        },
+        wechatWebLogin: function(e) {
             //阻止默认跳转
             e.preventDefault();
+
             //显示loading
             $("#loading").css("display", "block");
+
             //请求登陆二维码
-            AJAX.request("GET", "wechatWeb/qrcode", {}, function(result) {
+            AJAX.request("GET", LOGIN.urls.wechatWebQrcodeUrl(), {}, function(result) {
                 //模态框，加载登陆二维码
                 $("#qrcode").html("");
                 $("#qrcode").append($('<img src="' + result + '" />'));
                 //模态框，出现
                 $("#wechatWebLoginModal").modal("show");
+
                 //隐藏loading
                 $("#loading").css("display", "none");
 
                 //获取扫码结果
-                AJAX.request("GET", "wechatWeb/login", {}, function(result) {
+                AJAX.request("GET", LOGIN.urls.wechatWebLoginUrl(), {}, function(result) {
                     //如果成功，则跳转
                     window.location.href = result;
+                }, function() {
+                    //模态框，消失
+                    $("#wechatWebLoginModal").modal("hide");
                 });
             });
+        },
+        register: function(_this) {
+            //获取用户名、密码、姓名、邮箱
+            var $username = $("#registerUsername").val().trim();
+            var $password = $("#registerPassword").val().trim();
+            var $name = $("#registerName").val().trim();
+            var $email = $("#registerEmail").val().trim();
+
+            //验证
+            if ($username == "" || $password == "" || $name == "" || $email == "") {
+                alert ("请都填上！");
+                return;
+            }
+
+            //按钮不可用
+            _this.attr("disabled", true);
+
+            //显示loading
+            $("#loading").css("display", "block");
+
+            //发送注册请求
+            AJAX.request("POST", LOGIN.urls.registerUrl(), {
+                "username": $username,
+                "password": $password,
+                "name": $name,
+                "email": $email
+            }, function(result) {
+                //显示提示消息
+                alert (result);
+                //隐藏loading
+                $("#loading").css("display", "none");
+                //关闭模态框
+                $("#registerModal").modal("hide");
+                //按钮可用
+                _this.attr("disabled", false);
+            }, function() {
+                //隐藏loading
+                $("#loading").css("display", "none");
+                //关闭模态框
+                $("#registerModal").modal("hide");
+                //按钮可用
+                _this.attr("disabled", false);
+            });
+        }
+    };
+</script>
+<script type="text/javascript">
+    $(function() {
+
+        //设置背景图片
+        $.backstretch("img/background.jpg");
+
+        //获取在线人数
+        LOGIN.onlines();
+
+        //登陆操作
+        $('.login-form').on('submit', function(e) {
+            LOGIN.login(e);
         });
+
+        //微信登陆操作
+        $("#wechatLoginBtn").click(function(e) {
+            LOGIN.wechatWebLogin(e);
+        });
+
+        //注册操作
+        $("#registerBtn").click(function() {
+           LOGIN.register($(this));
+        });
+
     });
 </script>
 </body>
-
 </html>

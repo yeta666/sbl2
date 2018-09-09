@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import tk.mybatis.spring.annotation.MapperScan;
@@ -73,10 +74,10 @@ public class Sbl2Application {
 	 * 配置跨域过滤器
 	 * @return
 	 */
-	@Bean
+	/*@Bean
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/*", buildConfig());
+		source.registerCorsConfiguration("*//*", buildConfig());
 		return new CorsFilter(source);
 	}
 
@@ -86,7 +87,7 @@ public class Sbl2Application {
 		corsConfiguration.addAllowedHeader("*");	// 2允许任何头
 		corsConfiguration.addAllowedMethod("*");	// 3允许任何方法（post、get等）
 		return corsConfiguration;
-	}
+	}*/
 
 	/**
 	 * 这种方式用于配置第三方过滤器
@@ -128,6 +129,20 @@ public class Sbl2Application {
 		public void addInterceptors(InterceptorRegistry registry) {
 			registry.addInterceptor(myInterceptor).addPathPatterns("/**");
 			super.addInterceptors(registry);
+		}
+
+		@Override
+		public void addCorsMappings(CorsRegistry registry) {
+			registry.addMapping("/**")
+					.allowedOrigins("*")
+					.allowedMethods("PUT", "DELETE", "GET", "POST")
+					.allowedHeaders("*")
+					.exposedHeaders("access-control-allow-headers",
+							"access-control-allow-methods",
+							"access-control-allow-origin",
+							"access-control-max-age",
+							"X-Frame-Options")
+					.allowCredentials(false).maxAge(3600);
 		}
 	}
 
